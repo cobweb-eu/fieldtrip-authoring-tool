@@ -55,7 +55,7 @@ var Text = function(name, type, required, placeholder, value, step, min, max, ma
  */
 Text.prototype.render = function(i){
   var text = new Array();
-  text.push('\n<div class="fieldcontain" id="fieldcontain-'+this.type+'-'+i+'">');
+  text.push('\n<div class="fieldcontain" id="fieldcontain-'+this.type+'-'+i+'" type="text">');
   text.push('\n<label for="form-'+this.type+'-'+i+'">'+this.name+'</label>');
   var min = "", max = "", step = "";
   if(this.min !=  undefined && this.max != undefined){
