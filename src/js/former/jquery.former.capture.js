@@ -14,7 +14,7 @@ Capture.prototype.render = function(){
   if(this.capture === "microphone"){
     field = "audio";
   }
-  text.push('\n<div class="fieldcontain" id="fieldcontain-'+field+'-'+this.n+'">');
+  text.push('\n<div class="fieldcontain" id="fieldcontain-'+field+'-'+this.n+'" data-cobweb-type="'+this.capture+'">');
   text.push('\n<div class="button-wrapper button-'+this.capture+'">');
   var hidden = "";
   if(this.capture === 'gps'){

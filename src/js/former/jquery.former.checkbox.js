@@ -40,7 +40,7 @@ var CheckBoxGroup = function(title, n, names, required){
 
 CheckBoxGroup.prototype.render = function(){
   var group = new Array();
-  group.push('\n<div class="fieldcontain" id="fieldcontain-checkbox-'+this.n+'">');
+  group.push('\n<div class="fieldcontain" id="fieldcontain-checkbox-'+this.n+'" data-cobweb-type="checkbox">');
   //group.push('\n<div id="chbox'+this.n+'">');
   group.push('\n<fieldset>');
   group.push('\n<legend>'+this.title+'</legend>');

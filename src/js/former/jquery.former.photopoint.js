@@ -9,7 +9,7 @@ var PhotoPointImplementation = function(target, title, label, type, elements){
 PhotoPointImplementation.prototype.implement = function(){
   if($("#"+this.target).find(".camera").length===0){
     var i = findIForFieldcontain("#"+this.target, '.fieldcontain', 'image');
-    var capture = new Capture(this.title, this.label, i, 'image/png', 'required', 'camera');
+    var capture = new Capture(this.title, this.label, i, 'image/png', 'required', 'camera-point');
     $("#"+this.target).append(capture.render().join(""));
     appendEditButtons("fieldcontain-image-"+i);
     

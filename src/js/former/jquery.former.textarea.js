@@ -24,7 +24,7 @@ var TextArea = function(name, required, placeholder){
 
 TextArea.prototype.render = function(i){
   var text = new Array();
-  text.push('\n<div class="fieldcontain" id="fieldcontain-textarea-'+i+'" type="textarea">');
+  text.push('\n<div class="fieldcontain" id="fieldcontain-textarea-'+i+'" data-cobweb-type="textarea">');
   text.push('\n<label for="form-textarea-'+i+'">'+this.name+'</label>');
   text.push('\n<textarea name="form-textarea-'+i+'" id="form-textarea-'+i+'" placeholder="'+this.placeholder+'" '+this.required+' readonly="readonly" ></textarea>');
   text.push("\n</div>\n");
