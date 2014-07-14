@@ -37,11 +37,12 @@ def install(app='src'):
                        fetch_config=False)
 
 
-def _get_dest_path(path):
-    if path.endswith("js"):
-        return js_ext
-    elif path.endswith("css"):
-        return css_ext
+    def _get_dest_path(path):
+        if path.endswith("js"):
+            return js_ext
+        elif path.endswith("css"):
+            return css_ext
+
 
     paths = ast.literal_eval(local('bower -j list -p', capture=True))
     for path in paths:
