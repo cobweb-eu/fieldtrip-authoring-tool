@@ -1,0 +1,23 @@
+/*** overrides for bootstrap.css ***/
+
+/* The container color */
+    .container-fluid {
+       /*background-color: #4C7A0F;*/
+    }
+
+/* All buttons */
+    .btn{
+       background-color: #4C7A0F;
+       background-image: linear-gradient(to bottom,#7daf3e,#304820);
+    }
+    .btn:hover, .btn:focus{
+	color: #304820;
+        background-color: #304820;
+    }
+
+
+/*** overrides for jquery-ui -- TODO: themeroller ??? ***/
+    .ui-widget-header {
+	border: 1px solid #2C622E;
+	background: #2C6230;
+    }
