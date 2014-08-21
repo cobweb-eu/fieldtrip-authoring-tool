@@ -25,6 +25,10 @@
       var textAreaimplementation = new TextAreaImplementation(target, "Description", element, elements);
       textAreaimplementation.implement();
     },
+    warningAction : function(target, element, elements){
+      var warningimplementation = new WarningImplementation(target, "WARNING", element, elements);
+      warningimplementation.implement();
+    },
     checkboxAction : function(target, element, elements){
       var i = findHighestElement(target, "input:checkbox", element+"-");
       i++;

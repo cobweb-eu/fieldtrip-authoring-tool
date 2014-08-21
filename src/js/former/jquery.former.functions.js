@@ -177,6 +177,9 @@ function getValueFromEditForm(type, dialog_id, fid){
     textarea: function(dialog_id, fid){
       return $("#"+dialog_id+" #"+fid+" textarea").val();
     },
+    warning: function(dialog_id, fid){
+      return $("#"+dialog_id+" #"+fid+" warning").val();
+    },
     checkbox: function(dialog_id, fid){
       return $("#"+dialog_id+" #"+fid+" input[type=checkbox]:checked").val();
     },

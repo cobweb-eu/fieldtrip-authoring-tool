@@ -92,6 +92,32 @@ OptionsForm.prototype.enableEvents = {
       changeStatus();
     });
   },
+  warning: function(i, target){
+     var id = "#form-warning-"+i;
+     $("#warning_title").keyup(function(event){
+      $(id).prev().text($(this).val());
+      limitChars('warning_title', 50, 'charlimitinfo1');
+      if($("#iframe").dialog("isOpen")==true){
+        var $$ = window.frames[0].jQuery;
+        $$(id).prev().text($(this).val());
+      }
+      changeStatus();
+    });
+    
+    $("#warning_placeholder").keyup(function(event){
+      $(id).attr("placeholder", $(this).val());
+      if($("#iframe").dialog("isOpen")==true){
+        var $$ = window.frames[0].jQuery;
+        $$(id).attr("placeholder", $(this).val());
+      }
+      changeStatus();
+    });
+    
+    $(".required").change(function(event){
+      ($(this).val() == "true") ? $(id).attr("required", true) : $(id).removeAttr("required");
+      changeStatus();
+    });
+  },
   checkbox: function(i, target){
     var id = "#fieldcontain-checkbox-"+i;
     var ini = "#form-";
@@ -387,6 +413,11 @@ OptionsForm.prototype.render = {
     form.push('<div class="element-name">Placeholder</div> <div class="element"><input type="text" name="textarea_placeholder" id="textarea_placeholder" value="'+this.placeholder+'" /></div>');
     return form;
   },
+  warning: function(){
+    var form = this.createWarningForm();
+    form.push('<div class="element-name">Placeholder</div> <div class="element"><textarea rows="6" name="warning_placeholder" id="warning_placeholder">'+this.placeholder+'</textarea></div>');
+    return form;
+  },
   radio: function(){
     var form = this.createBasicForm();
     form.push('<div class="element-name">Elements</div> <div class="accordion">');
@@ -452,6 +483,12 @@ OptionsForm.prototype.createBasicForm = function(){
   form.push("<div class='element-name'>Title</div> <div class='element'><input type='text' name='"+this.type+"_title' id='"+this.type+"_title' value='"+this.title+"' /></div>");
   form.push("<div class='element-name'>Required</div> <div class='element'><select class='required'><option value='true' "+yes+">Yes</option><option value='false' "+no+">No</option></select></div>");
   return form;
+}
+
+OptionsForm.prototype.createWarningForm = function(){
+  var form = new Array();
+  form.push("<div class='element-name'>Title</div> <div class='element'><input type='text' name='"+this.type+"_title' id='"+this.type+"_title' value='"+this.title+"' /></div>");
+ return form;
 }
 
 OptionsForm.prototype.renderGroup = function(type){

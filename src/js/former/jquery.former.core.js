@@ -25,7 +25,8 @@
             "textareaAction": ["textarea", "Textarea"],
             "photoAction": ["image", "Photo"],
             "audioAction": ["audio", "Audio"],
-            "buttonAction": ["btn", "Button"]
+            "buttonAction": ["btn", "Button"],
+            "warningAction": ["warning", "Warning"]
         }
     };
   
@@ -55,7 +56,8 @@
             "textareaAction": ["textarea", "Textarea"],
             "photoAction": ["image", "Photo"],
             "audioAction": ["audio", "Audio"],
-            "buttonAction": ["btn", "Button"]
+            "buttonAction": ["btn", "Button"],
+            "warningAction": ["warning", "Warning"]
         }
     }
   

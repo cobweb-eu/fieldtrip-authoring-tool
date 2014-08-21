@@ -41,6 +41,14 @@ Searcher.prototype.searchTypes = {
     //return [this.type, title, placeholder, required];
     return {"title": title, "placeholder": placeholder, "required": required, "group": null};
   },
+  warning: function(){
+    var find = this.target("#"+this.id).find("textarea");
+    var title = this.target("#"+this.id).find("label").text();
+    var placeholder = $(find).attr("placeholder");
+    var required = $(find).attr("required");
+    //return [this.type, title, placeholder, required];
+    return {"title": title, "placeholder": placeholder, "required": required, "group": null};
+  },
   text: function(){
     var find = this.target("#"+this.id).find("input");
     var title = this.target("#"+this.id).find("label").text();
