@@ -1,0 +1,131 @@
+<form id="searchform" action="/search/" method="post">
+  <div id="wrapper" class="searchpanel">
+    <div class="panel panel-default">
+        <h5 class="panel-title">
+          <a data-toggle="collapse" data-parent="#accordion" href="#collapse1">
+            Basic Search
+          </a>
+        </h5>
+      <div id="collapse1" class="panel-collapse collapse in">
+        <div class="panel-body">
+          <label>Project Name</label><input type="text" name="projectname" class="form-control"><br />
+          <label>Organisation Name</label><input type="text" name="organisationname" class="form-control"><br />
+        </div>
+      </div>
+    </div>
+
+    <div class="panel panel-default">
+        <h5 class="panel-title">
+          <a data-toggle="collapse" data-parent="#accordion" href="#collapse2">
+            Technology Type
+          </a>
+        </h5>
+      <div id="collapse2" class="panel-collapse collapse in">
+        <div class="panel-body">
+          <fieldset>
+            <% _.each(techtypes, function(name, id){ %>
+                <input type="checkbox" name="techtype" value="<%= id %>"><%= name %><br>
+            <% }); %>
+          </fieldset>
+        </div>
+      </div>
+    </div>
+
+    <div class="panel panel-default">
+        <h5 class="panel-title">
+          <a data-toggle="collapse" data-parent="#accordion" href="#collapse3">
+            Organisation Type
+          </a>
+        </h5>
+      <div id="collapse3" class="panel-collapse collapse in">
+        <div class="panel-body">
+          <fieldset>
+            <% _.each(orgtypes, function(name, id){ %>
+            <input type="checkbox" name="orgtype" value="<%= id %>"><%= name %><br>
+            <% }); %>
+          </fieldset>
+        </div>
+      </div>
+    </div>
+
+    <div class="panel panel-default">
+        <h5 class="panel-title">
+          <a data-toggle="collapse" data-parent="#accordion" href="#collapse4">
+            Status
+          </a>
+        </h5>
+      <div id="collapse4" class="panel-collapse collapse in">
+        <div class="panel-body">
+          <fieldset>
+            <% _.each(statuses, function(name, id){ %>
+            <input type="checkbox" name="status" value="<%= id %>"><%= name %><br>
+            <% }); %>
+          </fieldset>
+        </div>
+      </div>
+    </div>
+
+    <div class="panel panel-default">
+        <h5 class="panel-title">
+          <a data-toggle="collapse" data-parent="#accordion" href="#collapse5">
+            Vehicle Venture Type
+          </a>
+        </h5>
+      <div id="collapse5" class="panel-collapse collapse in">
+        <div class="panel-body">
+          <fieldset>
+            <% _.each(venturetypes, function(name, id){ %>
+            <input type="checkbox" name="venturetype" value="<%= id %>"><%= name %><br>
+            <% }); %>
+          </fieldset>
+        </div>
+      </div>
+    </div>
+
+    <div class="panel panel-default">
+        <h5 class="panel-title">
+          <a data-toggle="collapse" data-parent="#accordion" href="#collapse6">
+            Support Mechanisms
+          </a>
+        </h5>
+      <div id="collapse6" class="panel-collapse collapse in">
+        <div class="panel-body">
+          <fieldset>
+            <% _.each(supportmechanisms, function(name, id){ %>
+            <input type="checkbox" name="supportmechanism" value="<%= id %>"><%= name %><br>
+            <% }); %>
+          </fieldset>
+        </div>
+      </div>
+    </div>
+
+    <div class="panel panel-default">
+      <h5 class="panel-title">
+        <a data-toggle="collapse" data-parent="#accordion" href="#collapse7">
+          Capacity, kW
+        </a>
+      </h5>
+      <div id="collapse7" class="panel-collapse collapse in">
+        <div class="panel-body">
+          <fieldset>
+            <label>Total Capacity</label>
+            <div id="slider" class="noUiSlider"></div><br>
+            <span id="slider-info"></span>
+            <!--At least <input type="text" class="form-control" name="mintotal" value="0">
+            At most <input type="text" class="form-control" name="maxtotal" value="0">-->
+            <label>Community Owned</label>
+            <div id="slider2" class="noUiSlider"></div><br>
+            <span id="slider2-info"></span>
+            <!--
+            At least <input type="text" class="form-control" name="mincommunity" value="0">
+            At most <input type="text" class="form-control" name="maxcommunity" value="0">
+          -->
+          </fieldset>
+        </div>
+      </div>
+    </div>
+
+    <button type="reset" id="resetbutton" value="Reset" class="btn btn-primary" data-toggle="button">Reset</button> 
+    <button type="button" id="searchbutton" value="Search" class="btn btn-primary" data-toggle="button">Search</button><br />
+  </div>
+ </form>
