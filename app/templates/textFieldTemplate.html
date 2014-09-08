@@ -1,0 +1,8 @@
+<div class="fieldcontain" id="fieldcontain-<%=type%>-<%=i%>" data-cobweb-type="<%=type%>">
+  <label for="form-<%=type%>-<%=i%>"><%=title%></label>
+  <input name="form-<%=type%>-<%=i%>" id="form-<%=type%>-<%=i%>"
+    <% _.each(fields, function(val, key) { %>
+      <%=key%>="<%=val%>"
+    <% }); %>
+  >
+</div>

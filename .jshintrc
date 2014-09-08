@@ -1,0 +1,21 @@
+{
+    "camelcase": true,
+    "browser": true,
+    "globalstrict": true,
+    "globals": {
+        "console": false,
+        "define": false,
+        "localStorage": false,
+        "location": false,
+        "module": false,
+        "navigator": false,
+        "notification": false,
+        "OpenLayers": false,
+        "plugins": false,
+        "require": false,
+        "webdb": false
+    },
+    "indent": "4",
+    "jquery": true,
+    "maxparams": "3"
+}

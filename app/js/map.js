@@ -1,12 +1,9 @@
-define(['utils', 'leaflet', 'markercluster'], function(utils, L, C){
+define(['utils', 'leaflet'], function(utils, L){
 
     var map;
     var markers;
     var POILayer;
 
-    var markersold = new L.MarkerClusterGroup();
-    var markers = new L.MarkerClusterGroup();
-    var clustermarkers = new L.FeatureGroup();
     var zoomdisplay;
 
     /**
@@ -30,76 +27,6 @@ define(['utils', 'leaflet', 'markercluster'], function(utils, L, C){
         }
         return;
     };
-    
-    var orangeIcon = L.icon({
-        iconUrl: '/images/marker-icon-orange.png',
-        iconSize: [25,41],
-        iconAnchor: [12, 41],
-        popupAnchor: [-3, -76],
-        shadowUrl: '/images/marker-shadow.png',
-        shadowSize: [25, 41],
-        shadowAnchor: [7, 39]
-    });
-    
-    var redIcon = L.icon({
-        iconUrl: '/images/marker-icon-red.png',
-        iconSize: [25,41],
-        iconAnchor: [12, 41],
-        popupAnchor: [-3, -76],
-        shadowUrl: '/images/marker-shadow.png',
-        shadowSize: [25, 41],
-        shadowAnchor: [7, 39]
-    });
-    
-    var blueIcon = L.icon({
-        iconUrl: '/images/marker-icon-blue.png',
-        iconSize: [25,41],
-        iconAnchor: [12, 41],
-        popupAnchor: [-3, -76],
-        shadowUrl: '/images/marker-shadow.png',
-        shadowSize: [25, 41],
-        shadowAnchor: [7, 39]
-    });
- 
-    var cyanIcon = L.icon({
-        iconUrl: '/images/marker-icon-cyan.png',
-        iconSize: [25,41],
-        iconAnchor: [12, 41],
-        popupAnchor: [-3, -76],
-        shadowUrl: '/images/marker-shadow.png',
-        shadowSize: [25, 41],
-        shadowAnchor: [7, 39]
-    });
-
-    var greenIcon = L.icon({
-        iconUrl: '/images/marker-icon-green.png',
-        iconSize: [25,41],
-        iconAnchor: [12, 41],
-        popupAnchor: [-3, -76],
-        shadowUrl: '/images/marker-shadow.png',
-        shadowSize: [25, 41],
-        shadowAnchor: [7, 39]
-    });
-
-    var greyIcon = L.icon({
-        iconUrl: '/images/marker-icon-grey.png',
-        iconSize: [25,41],
-        iconAnchor: [12, 41],
-        popupAnchor: [-3, -76],
-        shadowUrl: '/images/marker-shadow.png',
-        shadowSize: [25, 41],
-        shadowAnchor: [7, 39]
-    });
-
-    var yellowIcon = L.icon({
-        iconUrl: '/images/marker-icon-yellow.png',
-        iconSize: [25,41],
-        iconAnchor: [12, 41],
-        popupAnchor: [-3, -76],
-        shadowUrl: '/images/marker-shadow.png',
-        shadowSize: [25, 41],
-        shadowAnchor: [7, 39]
-    });
 
     var pointToLayer = function (feature, latlng) {
         // choose icon according to technology
@@ -176,36 +103,6 @@ define(['utils', 'leaflet', 'markercluster'], function(utils, L, C){
         
         return "";
     };
-    
-    function createCookie(name, value, expires, path, domain) {
-        var cookie = name + "=" + escape(value) + ";";
-        
-        if (expires) {
-            // If it's a date
-            if(expires instanceof Date) {
-              // If it isn't a valid date
-                if (isNaN(expires.getTime()))
-                expires = new Date();
-            }
-            else
-                expires = new Date(new Date().getTime() + parseInt(expires) * 1000 * 60 * 60 * 24);
-         
-            cookie += "expires=" + expires.toGMTString() + ";";
-        }
-         
-        if (path)
-            cookie += "path=" + path + ";";
-        if (domain)
-            cookie += "domain=" + domain + ";";
-
-        document.cookie = cookie;
-    };
-    
-    var getCookie = function(name) {
-        var value = "; " + document.cookie;
-        var parts = value.split("; " + name + "=");
-        if (parts.length == 2) return parts.pop().split(";").shift();
-    };
 
     return{
         /**
@@ -273,46 +170,7 @@ define(['utils', 'leaflet', 'markercluster'], function(utils, L, C){
             }
             legend.addTo(map);
             
-            $('#togglelegend').click(function() {
-            	$("#legend-panel").toggle();
-            });
-    
-            $('#togglehelp').click(function() {
-            	$("#help-popup").toggle();
-            });
-            
-            $('#showall').click(function() {
-  
-  				$.ajax( utils.getBaseURL()+"/getallprojects" ).done(function(data) {
-	                POILayer = L.geoJson(data, {
-	                    pointToLayer: pointToLayer,
-	                    onEachFeature:onEachFeature
-	                });
-	                POILayer.addTo(map);
-            	}).fail(function() {
-                	console.log('failed');
-            	});
-
-			});
-            
-            $('#record').click(function() {
-                // record current map view to cookie
-                var bnds = map.getBounds();
-                var zoom = map.getZoom();
-                createCookie("zoom", zoom.toString(),3650);
-                createCookie("lat", map.getCenter().lat.toString(),3650);
-                createCookie("lng", map.getCenter().lng.toString(),3650);
-                alert("The current map location and zoom level has been recorded.\nTo restore your map to the current view, you can click on the Home icon at any time."); 
-            });
-            
-            $('#home').click(function() {
-                // restore map view from cookie
-                if (getCookie("zoom")!=null) {
-                    var latlng = new L.LatLng(parseFloat(getCookie("lat")), parseFloat(getCookie("lng")));
-                    var zoom = parseInt(getCookie("zoom"));
-                    map.setView(latlng,zoom);
-                }    
-            });
+           
     
             // scale control
             L.control.scale({position: 'bottomright'}).addTo(map);
@@ -326,43 +184,6 @@ define(['utils', 'leaflet', 'markercluster'], function(utils, L, C){
                 attribution: 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, <a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="http://mapbox.com">Mapbox</a>',
                 maxZoom: 15
             }).addTo(map);
-        },
-
-        /**
-         * POIs are geographically determined clusters
-         */
-        getclusters: getclusters,
-
-        /**
-         * Gets all project POIs
-         * @param: the base url of the django app
-         */
-        getGeoJSON: function(baseUrl) {
-            $.ajax( utils.getBaseURL()+"/getallprojects" ).done(function(data) {
-                POILayer = L.geoJson(data, {
-                    pointToLayer: pointToLayer,
-                    onEachFeature:onEachFeature
-                });
-                POILayer.addTo(map);
-            }).fail(function() {
-                console.log('failed');
-            });
-        },
-
-        /**
-         * function for getting filtered data
-         * POSTS query, get back geojson and redisplay POI layer
-         */
-         
-        getFilteredGeoJSON: function() {
-            var form = $('#searchform');
-            $.ajax({url:utils.getBaseURL()+"/search/", type:"post", data:form.serialize()}).done(function(data) {
-                map.removeLayer( POILayer );
-                POILayer = L.geoJson(data, {pointToLayer: pointToLayer, onEachFeature:onEachFeature});
-                POILayer.addTo(map);
-            }).fail(function(jqxhr, status, errorthrown) {
-                console.log(jqxhr.responseText);
-            });
         }
     };
 });

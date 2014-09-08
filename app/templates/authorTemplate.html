@@ -1,0 +1,88 @@
+<div class="col-md-3">
+  <div class="well sidebar-nav">
+    <fieldset id="elements-fieldset">
+      <legend>Form Elements</legend>
+      <ul id="elements" class="nav nav-list" style="display: block;">
+        <li class="dragging-element former-box ui-draggable">
+          <a href="javascript:void(0)" class="btn btn-primary btn-large" id="text">Text<i class="icon-chevron-right"></i></a>
+        </li>
+        <li class="dragging-element former-box ui-draggable">
+          <a href="javascript:void(0)" class="btn btn-primary btn-large" id="range">Range<i class="icon-chevron-right"></i></a>
+        </li>
+        <li class="dragging-element former-box ui-draggable">
+          <a href="javascript:void(0)" class="btn btn-primary btn-large" id="textarea">Text Area<i class="icon-chevron-right"></i></a>
+        </li>
+        <li class="dragging-element former-box ui-draggable">
+          <a href="javascript:void(0)" class="btn btn-primary btn-large" id="checkbox">Multiple Choice Selector<i class="icon-chevron-right"></i></a>
+        </li>
+        <li class="dragging-element former-box ui-draggable">
+          <a href="javascript:void(0)" class="btn btn-primary btn-large" id="radio">Single Choice Selector<i class="icon-chevron-right"></i></a>
+        </li>
+        <li class="dragging-element former-box ui-draggable">
+          <a href="javascript:void(0)" class="btn btn-primary btn-large" id="select">Drop down Selector<i class="icon-chevron-right"></i></a>
+        </li>
+        <li class="dragging-element former-box ui-draggable">
+          <a href="javascript:void(0)" class="btn btn-primary btn-large" id="image">Image Capture<i class="icon-chevron-right"></i></a>
+        </li>
+        <li class="dragging-element former-box ui-draggable">
+          <a href="javascript:void(0)" class="btn btn-primary btn-large" id="image">Image with Point<i class="icon-chevron-right"></i></a>
+        </li>
+        <li class="dragging-element former-box ui-draggable">
+          <a href="javascript:void(0)" class="btn btn-primary btn-large" id="audio">Audio Capture<i class="icon-chevron-right"></i></a>
+        </li>
+      </ul>
+    </fieldset>
+  </div><!--sidebar-->
+</div><!--col-md-3-->
+<div class="col-md-9">
+  <nav class="navbar navbar-default" role="navigation">
+    <div class="container-fluid">
+      <!-- Brand and toggle get grouped for better mobile display -->
+      <div class="navbar-header">
+        <a class="navbar-brand" href="#">Edit menu</a>
+      </div>
+
+      <!-- Collect the nav links, forms, and other content for toggling -->
+      <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+        <ul class="nav navbar-nav" id="edit-buttons">
+          <li class="dropdown">
+            <a href="javascript:void(0)" role="button" class="dropdown-toggle" data-toggle="dropdown">Mode <b class="caret"></b></a>
+            <ul class="dropdown-menu" role="menu">
+              <li><a href="javascript:void(0)" id="edit">Edit</a></li>
+              <li><a href="javascript:void(0)" id="preview">Preview</a></li>
+              <li><a href="javascript:void(0)" id="code">Code</a></li>
+            </ul>
+          </li>
+        </ul>
+        <ul class="nav navbar-nav" id="screen">
+          <li id="fat-menu" class="dropdown">
+            <a href="javascript:void(0)" id="rotation" role="button" class="dropdown-toggle" data-toggle="dropdown">Rotation <b class="caret"></b></a>
+            <ul class="dropdown-menu" role="menu" aria-labelledby="rotation">
+              <li><a tabindex="-1" href="javascript: void(0)" class="rotation" id="hor">Horizontally</a></li>
+              <li><a tabindex="-1" href="javascript: void(0)" class="rotation" id="ver">Vertically</a></li>
+            </ul>
+          </li>
+          <li id="size-screen" class="dropdown">
+            <a href="javascript:void(0)" id="sizes-screen" role="button" class="dropdown-toggle" data-toggle="dropdown">Size screen <b class="caret"></b></a>
+            <ul class="dropdown-menu" role="menu" aria-labelledby="sizes" id="select-sizes">
+              <li><a tabindex="-1" href="javascript: void(0)" title="240x320" class="device-width">240x320</a></li>
+              <li><a tabindex="-1" href="javascript: void(0)" title="320x480" class="device-width">320x480</a></li>
+              <li><a tabindex="-1" href="javascript: void(0)" title="480x800" class="device-width">480x800</a></li>
+              <li><a tabindex="-1" href="javascript: void(0)" title="600x1024" class="device-width">600x1024</a></li>
+            </ul>
+          </li>
+          <li id="actions" class="dropdown">
+            <a href="javascript:void(0)" id="save-actions" role="button" class="dropdown-toggle" data-toggle="dropdown">Actions <b class="caret"></b></a>
+            <ul class="dropdown-menu" role="menu" aria-labelledby="sizes" id="save-actions-list">
+              <li><a href="javascript:void(0)" id="save" class="btn disabled">Update</a></li>
+              <li><a href="javascript:void(0)" id="delete" class="btn disabled" role="button">Delete</a></li>
+              <li><a href="javascript:void(0)" id="synch" class="btn" role="button">Save</a></li>
+            </ul>
+          </li>
+        </ul>
+      </div><!-- /.navbar-collapse -->
+    </div><!-- /.container-fluid -->
+  </nav>
+  <div id="f_title"></div>
+  <div id="form-content"></div>
+</div><!--col-md-9-->

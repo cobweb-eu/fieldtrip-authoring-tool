@@ -29,25 +29,20 @@ OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH
 DAMAGE.
 */
 
-define([
-  'jquery',
-  'underscore',
-  'backbone',
-  'utils',
-  'text!templates/homeTemplate.html'
-], function($, _, Backbone, utils, homeTemplate){
+"use strict";
 
-    var HomeView = Backbone.View.extend({
-        el: $("#content"),
-
-        render: function(){
-
-            $('.menu li').removeClass('active');
-            $('.menu li a[href="#"]').parent().addClass('active');
-            this.$el.html(homeTemplate);
-        }
-    });
-
-    return HomeView;
+load("pcapi.js")
+Qunit.test("login", function(assert){
+    var user = {
+        'testclouduser': 'george.hamilton@ed.ac.uk',
+        'testcloudpass': 'un5afe'
+    };
+    var options = {
+        "url": "http://cobwebsvc.edina.ac.uk",
+        "version": "1.3"
+    }
+    
+    var test_pcapi = pcapi();
+    test_pcapi.init(options);
+    assert.equal()
 });
-

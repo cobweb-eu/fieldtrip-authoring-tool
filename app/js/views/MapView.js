@@ -4,9 +4,8 @@ define([
     'backbone',
     'utils',
     'map',
-    'views/MapSideMenuView',
     'text!templates/mapTemplate.html'
-], function($, _, Backbone, utils, map, MapSideMenuView, mapTemplate){
+], function($, _, Backbone, utils, map, mapTemplate){
 
     /**
      * change height of the map on the fly
@@ -42,18 +41,6 @@ define([
             map.initMap('map', utils.getParameters());
             map.getclusters();
             enableSideMenu();
-            var sidemenuView = new MapSideMenuView();
-            sidemenuView.render();
-            
-            utils.setUpCRF();
-            
-            $(document).on('click', '#searchbutton', map.getFilteredGeoJSON);
-            
-            $(document).on('click', '#resetbutton', function() {
-                document.getElementById("searchform").reset();
-                map.getclusters();
-            });
-            
         }
     });
 

@@ -9,13 +9,13 @@
       <meta name="viewport" content="width=device-width">
       
       <!--external libs-->
-      <link rel="stylesheet" href="css/lib/leaflet.min.css" />
-      <link rel="stylesheet" href="css/lib/swipebox.min.css" />
-      <link rel="stylesheet" href="css/lib/bootstrap.min.css" />
+      <link href="css/jquery-ui-1.9.1.custom.min.css" rel="stylesheet" type="text/css">
+      <link rel="stylesheet" href="css/libs/leaflet.min.css" />
+      <link rel="stylesheet" href="css/libs/swipebox.min.css" />
+      <link rel="stylesheet" href="css/libs/bootstrap.min.css" />
       <!--local css-->
       <link rel="stylesheet" media="screen" href="css/style.css" />
       <link rel="stylesheet" media="screen" href="css/menu.css" />
-      <link rel="stylesheet" media="screen" href="css/libs/jquery.nouislider.css" />
       <!--fonts-->
       <link href='http://fonts.googleapis.com/css?family=Montserrat+Alternates:400,700' rel='stylesheet' type='text/css'>
       <link href='http://fonts.googleapis.com/css?family=Montserrat+Alternates:400,700' rel='stylesheet' type='text/css'>
@@ -28,7 +28,7 @@
 
         if (typeof console == "undefined") {
           this.console = {log: function() {}};
-        }        
+        }
 
       </script>
 
@@ -37,40 +37,62 @@
     <head>
     <body>
 
-    <nav class="navbar navbar-fixed-top" role="navigation" id="header">
-     
-      <a class="navbar-brand" href="#" id="logo">COBWEB Author</a>
+    <!--<nav class="navbar navbar-fixed-top" role="navigation" id="header">-->
+    <div class="navbar navbar-default navbar-fixed-top" role="navigation" id="header">
       <div class="container">
-        
         <div class="navbar-header">
+          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target=".navbar-collapse">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="#">COBWEB Author</a>
         </div>
-
-        <!-- Collect the nav links, forms, and other content for toggling -->
-        <div class="collapse navbar-collapse navbar-ex1-collapse">
-          <ul class="nav navbar-nav navbar-right menu">
+        <div class="navbar-collapse collapse">
+          <ul class="nav navbar-nav navbar-right menu" id="mainmenu">
             <li><a href="#">Home <i class="small fa fa-share"></i></a><span class="separator"></span></li>
-            <li><a href="#/author">Create a new form <i class="small fa fa-share"></i></a><span class="separator"></span></li>
-            <li><a href="#/viewer">Record Viewer</a> <i class="small fa fa-share"></i></a><span class="separator"></span></li>
-            <li><a href="#/editors">Editors <i class="small fa fa-share"></i></a><span class="separator"></span></li>
-            <li><a href="#/layers">Layers <i class="small fa fa-share"></i></a><span class="separator"></span></li>
-            <li><a href="#" id="open-login">Login <i class="small fa fa-share"></i></a><span class="separator"></span></li>
+            <li><a href="#/author" class="menu-btn hide">Create a new form <i class="small fa fa-share"></i></a><span class="separator"></span></li>
+            <li><a href="#/editors" class="menu-btn hide">Editors <i class="small fa fa-share"></i></a><span class="separator"></span></li>
+            <li><a href="#/viewer" class="menu-btn hide">Record Viewer</a> <i class="small fa fa-share"></i></a><span class="separator"></span></li>
+            <li><a href="#/layers" class="menu-btn hide">Layers <i class="small fa fa-share"></i></a><span class="separator"></span></li>
+            <li><a href="/" class="menu-btn hide">Logout <i class="small fa fa-share"></i></a><span class="separator"></span></li>
+            <li><a href="" data-toggle="modal" data-target="#myModal" id="login-btn">Login <i class="small fa fa-share"></i></a><span class="separator"></span></li>
             <li><a href="href="mailto:edina@ed.ac.uk"">Contact <i class="small fa fa-share"></i></a></li>
           </ul>
-        </div><!-- /.navbar-collapse -->
+        </div><!--/.nav-collapse -->
       </div><!-- /.container -->
-    </nav>
+    </div>
 
     <!-- Content -->
-    <div id="content" class="container-fluid">
-      Loading...
-    </div>
+    <div class="jumbotron">
+      <div id="content" class="container-fluid">
+        Loading...
+      </div>
+    </div><!--jumbotron-->
     
     <footer>
       <p>
-        <a href="#" target="blank"><img src="img/eu.jpg"></a>
+        <a href="#" target="blank"><img src="images/eu.jpg"></a>
         This project has received funding from the European Union’s Seventh Programme for research, technological development and demonstration under grant agreement No 308513.
       </p>
     </footer>
+
+    <div id="jquery-dialog"></div>
+
+    <!-- Modal -->
+    <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+            <h4 class="modal-title" id="myModalLabel">Login</h4>
+          </div>
+          <div class="modal-body" id="myModalBody"></div>
+          <div class="modal-footer"></div>
+        </div>
+      </div>
+    </div>
 
   </body>
 </html>

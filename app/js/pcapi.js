@@ -31,13 +31,102 @@ DAMAGE.
 
 "use strict";
 
-/**
- * interface for the PCAPI
- */
+var pcapi = function() {
 
-define([], function(){
+    /**
+     * Unset user login id.
+     */
+    var clearCloudLogin = function(){
+        localStorage.setItem('cloud-user', JSON.stringify({'id': undefined}));
+    };
 
     return {
+
+        /**
+         * Login to cloud provider.
+         * @param callback Function called after login attemt.
+         * @param cbrowser Function to allow caller requires access to childbrowser.
+         */
+        doLogin: function(callback, cbrowser){
+            var loginUrl = this.getCloudProviderUrl() + '/auth/'+this.getProvider();
+
+            var pollTimer, pollTimerCount = 0, pollInterval = 3000, pollForMax = 5 * 60 * 1000; //min
+
+            var userId = this.getUserId();
+            if(userId !== undefined){
+                console.debug("got a user id: " + userId);
+                loginUrl += '/' + userId;
+            }
+
+            // clear user id
+            clearCloudLogin();
+            console.debug('Login with: ' + loginUrl + '?async=true');
+
+            $.ajax({
+                url: loginUrl + '?async=true',
+                timeout: 3000,
+                cache: false,
+                success: function(data){
+                    console.debug("Redirect to: " + data.url);
+                    var cloudUserId = data.userid;
+
+                    // close child browser
+                    var closeCb = function(userId){
+                        clearInterval(pollTimer);
+                        callback(true, userId);
+                    };
+
+                    // open dropbox login in child browser
+                    var cb = window.open(data.url, '_blank', 'location=no');
+                    //cb.addEventListener('exit', closeCb);
+
+                    var pollUrl = loginUrl + '/' + cloudUserId + '?async=true';
+                    console.debug('Poll: ' + pollUrl);
+                    pollTimer = setInterval(function(){
+                        $.ajax({
+                            url: pollUrl,
+                            success: function(pollData){
+                                pollTimerCount += pollInterval;
+
+                                if(pollData.state === 1 || pollTimerCount > pollForMax){
+                                    if(pollData.state === 1 ){
+                                        this.setUserId(cloudUserId);
+                                    }
+                                    cb.close();
+                                    closeCb(cloudUserId);
+                                }
+                            },
+                            error: function(error){
+                                console.error("Problem polling api: " + error.statusText);
+                                closeCb(-1);
+                            },
+                            cache: false
+                        });
+                    }, pollInterval);
+
+                    if(cbrowser){
+                        // caller may want access to child browser reference
+                        cbrowser(cb);
+                    }
+                },
+                error: function(jqXHR, textStatus){
+                    var msg;
+                    if(textStatus === undefined){
+                        textStatus = ' Unspecified Error.';
+                    }
+                    else if(textStatus === "timeout") {
+                        msg = "Unable to login, please enable data connection.";
+                    }
+                    else{
+                        msg = "Problem with login: " + textStatus;
+                    }
+
+                    console.error(msg);
+                    callback(false, msg);
+                }
+            });
+        },
+
         /**
          * Initialize pcapi object
          * @param options.url url of the PCAPI
@@ -45,6 +134,33 @@ define([], function(){
          */
         init: function(options){
             this.cloudProviderUrl = options.url + "/" + options.version + "/pcapi";
+        },
+
+        /**
+         * Check if the user is logged in
+         * @param callback function after checking the login status
+         */
+        checkIfLoggedIn: function(callback){
+            console.log("check if user is logged in");
+
+            $.ajax({
+                url: this.getCloudProviderUrl() + '/auth',
+                type: "GET",
+                cache: false,
+                success: function(response){
+                    callback(true, response);
+                },
+                error: function(jqXHR, status, error){
+                    callback(false, error);
+                }
+            });
+        },
+
+        /**
+         * filter Records
+         */
+        filterRecords: function(callback){
+            this.getItems
         },
 
         /**
@@ -59,9 +175,9 @@ define([], function(){
          * @param remoteDir remote directory
          * @param callback function after fetching the items
          */
-        getItems: function(remoteDir, callback){
-            var url = this.getCloudProviderUrl() + '/'+remoteDir+'/' +
-                this.getProvider() + '/' + this.getUserId() +'/';
+        getFSItems: function(remoteDir, callback){
+            var url = this.getCloudProviderUrl() + '/fs/' +
+                this.getProvider() + '/' + this.getUserId() +'/'+remoteDir+'/';
 
             console.debug("Get items of "+remoteDir+" with " + url);
 
@@ -69,6 +185,43 @@ define([], function(){
                 type: "GET",
                 dataType: "json",
                 url: url,
+                success: function(data){
+                    if(data.error == 1){
+                        callback(false);
+                    }
+                    else{
+                        callback(true, data);
+                    }
+                },
+                error: function(jqXHR, status, error){
+                    console.error("Problem with " + url + " : status=" +
+                                  status + " : " + error);
+                    callback(false);
+                },
+                cache: false
+            });
+        },
+
+        /**
+         * Fetch all the records|editors on the cloud
+         * @param remoteDir remote directory [records|editors]
+         * @param callback function after fetching the items
+         */
+        getItems: function(remoteDir, filters, callback){
+            var url = this.getCloudProviderUrl() + '/'+remoteDir+'/' +
+                this.getProvider() + '/' + this.getUserId() +'/';
+
+            console.debug("Get items of "+remoteDir+" with " + url);
+            //if it's undefined make it empty object in order not to break it
+            if(filters === undefined){
+                filters = {};
+            }
+
+            $.ajax({
+                type: "GET",
+                dataType: "json",
+                url: url,
+                data: filters,
                 success: function(data){
                     if(data.error == 1){
                         callback(false);
@@ -119,6 +272,10 @@ define([], function(){
             return this.userId;
         },
 
+        saveItem: function(){
+            
+        },
+
         /**
          * TODO
          */
@@ -131,6 +288,45 @@ define([], function(){
          */
         setUserId: function(userId){
             this.userId = userId;
+        },
+
+        /**
+         * function for uploading a file
+         * @param remoteDir
+         * @param filename
+         */
+        uploadFile: function(remoteDir, filename, callback){
+            var url = this.getCloudProviderUrl() + '/fs/' +
+                this.getProvider() + '/' + this.getUserId() +'/'+remoteDir+'/'+filename;
+
+            console.debug("Upload item "+filename+" to "+remoteDir+" with " + url);
+
+            $.ajax({
+                type: "POST",
+                beforeSend: function(request) {
+                    request.setRequestHeader("X-Parse-Application-Id", 'MY-APP-ID');
+                    request.setRequestHeader("X-Parse-REST-API-Key", 'MY-REST-API-ID');
+                    request.setRequestHeader("Content-Type", file.type);
+                },
+                url: url,
+                data: file,
+                processData: false,
+                contentType: false,
+                success: function(data) {
+                    callback(true, data);
+                },
+                error: function(data) {
+                    var obj = jQuery.parseJSON(data);
+                    callback(false, obj.error);
+                }
+            });
+        },
+
+        /**
+         *
+         */
+        uploadItem: function(){
+            
         }
     };
-});
+};

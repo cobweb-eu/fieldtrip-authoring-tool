@@ -1,53 +1,77 @@
 {
-  "name": "Authoring Tool",
-  "version": "1.0.0",
-  "description": "A web app for creating your own forms and GIS visualizer.",
-  "keywords": [
-    "fieldtrip",
-    "Authoring Tool",
-    "custom forms",
-    "GIS"
-  ],
-  "authors": [
-    "Panos Terzis <panterz>"
-  ],
-  "license": "BSD",
-  "homepage": "http://fieldtripgb.edina.ac.uk/authoring/",
-  "dependencies": {
-    "jquery": "1.10.2",
-    "jquery-ui": "1.9.2",
-    "jquery-mobile-bower": "1.3.2",
-    "bootstrap": "2.3.2",
-    "jqueryui-timepicker-addon": "1.4.3",
-    "jquery-ui-touch-punch": "*",
-    "datatables": "1.9.4",
-    "openlayers": "2.13.1",
-    "d3": "3.3.11",
-    "jPaginator": "https://github.com/remylab/jpaginator/archive/master.zip",
-    "snippet": "http://www.steamdev.com/snippet/js/jquery.snippet.min.js",
-    "swipebox": "1.2.9"
-  },
-  "dependency_locations": {
-    "snippet": [
-      "index.js"
+    "name": "Authoring Tool",
+    "version": "1.0.0",
+    "description": "A web app for creating your own forms and GIS visualizer.",
+    "keywords": [
+        "fieldtrip",
+        "Authoring Tool",
+        "custom forms",
+        "GIS"
     ],
-    "jquery-mobile-bower": [
-      "js/jquery.mobile-x.x.min.js"
+    "authors": [
+        "Panos Terzis <panterz>"
     ],
-    "jPaginator": [
-      "jPaginator.js",
-      "jPaginator.css"
-    ],
-    "jqueryui-timepicker-addon": [
-      "src/jquery-ui-timepicker-addon.js"
-    ],
-    "swipebox": [
-      "src/js/jquery.swipebox.js",
-      "src/css/swipebox.css",
-      "src/img"
-    ]
-  },
-  "resolutions": {
-    "jquery": "1.10.2"
-  }
+    "license": "BSD",
+    "homepage": "http://fieldtripgb.edina.ac.uk/authoring/",
+    "dependencies": {
+        "jquery": "1.10.2",
+        "snippet": "http://www.steamdev.com/snippet/js/jquery.snippet.min.js",
+        "jquery-mobile-bower": "1.4.2",
+        "bootstrap": "3.2.0",
+        "jPaginator": "https://github.com/remylab/jpaginator/archive/master.zip",
+        "jqueryui-timepicker-addon": "1.4.3",
+        "swipebox": "1.2.9",
+        "leaflet": "http://leaflet-cdn.s3.amazonaws.com/build/leaflet-0.7.3.zip",
+        "leaflet.markerclusterer": "0.4.0",
+        "backbone": "1.1.0",
+        "underscore": "1.5.2",
+        "requirejs": "2.1.14",
+        "requirejs-text": "2.0.12",
+        "jquery-ui": "1.11.1",
+        "jquery-ui-touch-punch": "*",
+        "datatables": "1.10.2",
+        "d3": "3.3.11"
+    },
+    "location_dependencies": {
+        "jquery": ["jquery.js"],
+        "snippet": [
+            "index.js"
+        ],
+        "jquery-mobile-bower": [
+            "js/jquery.mobile-1.4.2.min.js"
+        ],
+        "bootstrap": ["dist/css/bootstrap.css",
+                      "dist/js/bootstrap.js",
+                      "dist/fonts/*"],
+        "jPaginator": [
+            "jPaginator.js",
+            "jPaginator.css"
+        ],
+        "jqueryui-timepicker-addon": [
+            "src/jquery-ui-timepicker-addon.js"
+        ],
+        "swipebox": [
+            "src/js/jquery.swipebox.js",
+            "src/css/swipebox.css",
+            "src/img/*"
+        ],
+        "leaflet": ["images/*",
+                    "leaflet.css",
+                    "leaflet.js"],
+        "leaflet.markerclusterer": ["dist/MarkerCluster.Default.css", "dist/leaflet.markercluster-src.js"],
+        "backbone": [
+            "backbone-min.js",
+            "backbone-min.map"
+        ],
+        "underscore": [
+            "underscore-min.js",
+            "underscore-min.map"
+        ],
+        "requirejs": ["require.js"],
+        "requirejs-text": ["text.js"],
+        "jquery-ui": ["jquery-ui.js"]
+    },
+    "resolutions": {
+        "jquery": "1.10.2"
+    }
 }

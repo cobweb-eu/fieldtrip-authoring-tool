@@ -2,9 +2,7 @@ define([
     'jquery',
     'underscore',
     'backbone',
-    'bootstrap',
-    'collections/FilterCollection',
-    'text!templates/filterTemplate.html'
+    'bootstrap'
 ], function($, _, Backbone, bootstrap, FilterCollection, filterTemplate){
 
     var SidePanelView = Backbone.View.extend({
@@ -32,31 +30,9 @@ define([
                     "venturetypes": prep_data.venturetypes
                 };
                 var html = this.template(data);
-		console.log(html);
                 $(this.el).html(html);
                 $('.collapse').collapse();
 
-		// add in capacity sliders
-		$('#slider').noUiSlider({
-						start: [ 1, 1000 ],
-						range: {
-							'min': 1,
-							'max': 1000
-						}
-					});
-
-        $('#slider').change(function(){
-            var vals=$("#slider").val();
-            $("#slider-info").html(vals);
-        });
-
-		$('#slider2').noUiSlider({
-						start: [ 1, 1000 ],
-						range: {
-							'min': 1,
-							'max': 1000
-						}
-					});
 
             }, this));
 

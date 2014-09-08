@@ -31,19 +31,7 @@ ul { list-style: none; }
         linear-gradient(#f1f6e9, #d8e5bf)
     ;
 }
-#left-menu-btn{
-    position: absolute;
-    left: 5px;
-    top: 10px;
-    z-index: 50000;
-}
-#logo {
-    height: 50px; *height: 59px; width: 100px; padding: 0px 0px; *padding: 10px 0px;
-    position: absolute;
-    //*width: 100%;*/
-    left: 0px;
-    margin: auto;
-}
+
 #logo img {z-index: 1000; width:300px; height: 70px; padding: 5px; margin: 0px; top:0px; left:0px; }
 .separator {
    /* width: 2px;
@@ -136,33 +124,18 @@ ul { list-style: none; }
 #map { width: 100%; height: 100%; }
 #list { width: 100%; background-color: #E9ECF2; padding-top: 1px; margin-top: -1px; }
 
-#legend-panel {
-	position:absolute;
-	padding: 10px;
-	top:-200px;
-	left:-200px;
-	background:#fff;
-	border:2px solid black;
-	z-index: 10000;
-	box-shadow: 5px 5px 5px #888888;
-}
 
-#help-popup {
-	position:absolute;
-	padding: 10px;
-	top:-200px;
-	left:-400px;
-	background:#fff;
-	border:2px solid black;
-	z-index: 10000;
-	box-shadow: 5px 5px 5px #888888;
-}
-#help-popup td {
-	padding: 5px;
-}
 
 /* Desktop style */
 .leaflet-control-container .leaflet-top { top: 79px;  }
+
+/* Form elements */
+.dragging-element {
+    position: relative;
+    margin-top: 5px;
+    cursor: move;
+    vertical-align: middle;
+}
 
 
 /* Handheld - landscape style */

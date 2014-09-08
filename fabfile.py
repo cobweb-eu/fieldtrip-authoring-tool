@@ -4,16 +4,16 @@ import datetime, os, json, ast, ConfigParser
 from jinja2 import Environment, PackageLoader, FileSystemLoader
 
 CURRENT_PATH = os.path.abspath(os.path.dirname(__file__))
-PROJ4JS_VERSION = "1.1.0"
+PROJ4JS_VERSION    = '1.1.0'
 
 config = None
 
-
+@task
 def install(app='src'):
     bower_home = os.sep.join((CURRENT_PATH, 'bower_components'))
     with lcd(CURRENT_PATH):
         _check_command('npm')
-        local("npm install")
+        local("npm -g install")
         _check_command('bower')
         local("bower install")
 
@@ -86,7 +86,7 @@ def _get_dest_path(path):
     
     #copy it to ext folder
     with lcd(CURRENT_PATH):
-        local('cp {0} {1}'.format(os.sep.join((proj_path, 'lib', 'proj4js-compressed.js')), os.sep.join((js_ext, 'proj4js.js'))))
+        local('cp {0} {1}'.format(os.sep.join((proj_path, 'libs', 'proj4js-compressed.js')), os.sep.join((js_ext, 'proj4js.js'))))
 
     #openlayers
     ol_path = os.sep.join((bower_home, 'openlayers'))
@@ -98,6 +98,60 @@ def _get_dest_path(path):
     with lcd(CURRENT_PATH):
         local('cp -r {0} {1}'.format(os.sep.join((ol_path, 'theme')), app))
         local('cp -r {0}/* {1}'.format(os.sep.join((ol_path, 'img')), os.sep.join((app, 'img'))))
+
+
+@task
+def install_js():
+    #install js dependencies
+    with lcd(CURRENT_PATH):
+        _check_command('npm')
+        local("npm install")
+        _check_command('bower')
+        local("bower install")
+    dep_root = 'app'
+    deps_paths = {"js": os.sep.join((dep_root, 'js','libs')),
+                  "css":os.sep.join((dep_root, 'css', 'libs')),
+                  "img": os.sep.join((dep_root, 'images')),
+                  "fonts": os.sep.join((dep_root, 'fonts'))
+    }
+    for key in deps_paths:
+        directory = deps_paths[key]
+        if key != "img":
+            if os.path.exists(directory):
+                local('rm -rf {0}/*'.format(directory))
+                #shutil.rmtree(directory)
+        if not os.path.exists(directory):
+            os.makedirs(directory)
+
+    npm_bin = os.path.join(CURRENT_PATH, 'node_modules', '.bin')
+    bower_root = os.path.join(CURRENT_PATH, 'bower_components')
+    with open('bower.json') as f:
+        deps = json.loads(f.read())
+        for dep in deps["location_dependencies"]:
+            for el in deps["location_dependencies"][dep]:
+                if el.endswith("*"):
+                    if "fonts" in el:
+                        local("cp -r {0} {1}".format(os.path.join(bower_root, dep, el), deps_paths["fonts"]))
+                    else:
+                        local("cp -r {0} {1}".format(os.path.join(bower_root, dep, el), deps_paths["img"]))
+                elif el.endswith("css"):
+                    css_file = os.sep.join((deps_paths["css"], dep+".min.css"))
+                    local("{0} --skip-rebase {1} -o {2}".format(os.path.join(npm_bin, 'cleancss'), os.path.join(bower_root, dep, el), css_file))
+                    filedata = _read_data(css_file)
+                    if "img/" in filedata:
+                        filedata = filedata.replace("img/", "../../images/")
+                    elif "images/" in filedata:
+                        filedata = filedata.replace("images/", "../../images/")
+                    elif "fonts" in filedata:
+                        filedata = filedata.replace("../fonts", "../../fonts")
+                    _write_data(css_file, filedata)
+                elif el.endswith("js"):
+                    if dep != "openlayers":
+                        local("{0} {1} -o {2}".format(os.path.join(npm_bin, 'uglifyjs'), os.path.join(bower_root, dep, el), os.sep.join((deps_paths["js"], dep+".min.js"))))
+                    else:
+                        local("cp {0} {1}".format(os.path.join(bower_root, dep, el), os.sep.join((deps_paths["js"], dep+".js"))))
+                else:
+                    local("cp {0} {1}".format(os.path.join(bower_root, dep, el), deps_paths["js"]))
 
 
 def _copy_lib(npm_bin, src_path, dest_path):
@@ -196,6 +250,7 @@ def _symlink():
 
 
 ###Configuration
+@task
 def generate_config_js(version=None, fetch_config=True):
     """ generate config.js """
     root, proj_home, src_dir = _get_source()
@@ -292,6 +347,14 @@ def _config(key, section='install'):
             return val
     else:
         return None
+
+def _read_data(fil):
+    """ TODO """
+    with open(fil, 'r') as f:
+        filedata = f.read()
+        f.close()
+        return filedata
+    return None
 
 def _write_data(fil, filedata):
     """ TODO """
