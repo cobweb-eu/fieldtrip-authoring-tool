@@ -32,7 +32,7 @@ DAMAGE.
 define([
   'jquery',
   'formerUtils',
-  'text!templates/textTemplate.html',
+  'text!templates/textFieldTemplate.html',
   'jqueryui'
 ], function($, futils, textTemplate){
 
@@ -50,9 +50,11 @@ define([
     };
 
     var addElement = function(element, target){
+        console.log(element+"Action")
+        //myActions[element+"Action"](target, element, getElements());
         for(choice in choices){
             if(choices[choice][1] === element){
-                myActions[option](target, choices[choice][0], getElements());
+                myActions[choice](target, choices[choice][0], getElements());
                 return false;
             }
         }
@@ -60,16 +62,16 @@ define([
     };
 
 
-    var enableEvents = function(id){
-        enableDragging();
-        enableDropping(id);
+    var enableEvents = function(dragId, dropId){
+        enableDragging(dragId);
+        enableDropping(dropId);
     };
     
     /**
      * function for enabling dragging
      */
-    var enableDragging = function(){
-        $("#elements li").draggable({
+    var enableDragging = function(id){
+        $("#"+id+" li").draggable({
             appendTo: "body",
             helper: "clone",
             iframeFix: true,
@@ -102,8 +104,8 @@ define([
      */
     var getElements = function(){
         var elements = new Array();
-        for(choice in this.options.choices){
-            elements.push(this.options.choices[choice][0])
+        for(choice in choices){
+            elements.push(choices[choice][0])
         }
         return elements;
     };
@@ -113,11 +115,16 @@ define([
             //var textimplementation = new TextImplementation(target, "Title", element, elements, "", null, null, null, 10);
             //textimplementation.implement();
             var data = {
-                i: 1,
-                type: "text",
-                
+                "i": 1,
+                "type": "text",
+                "title": "Title",
+                "elements": elements,
+                "fields": {
+                    "value": "",
+                    "maxlength": 10
+                }
             };
-            $("#"+target).append(textTemplate())
+            $("#"+target).append(_.template(textTemplate, data))
         },
         textareaAction : function(target, element, elements){
             var textAreaimplementation = new TextAreaImplementation(target, "Description", element, elements);
@@ -183,8 +190,8 @@ define([
     };
 
     return {
-        'init': function(id){
-            enableEvents(id);
+        'init': function(dragId, dropId){
+            enableEvents(dragId, dropId);
         }
     };
 });

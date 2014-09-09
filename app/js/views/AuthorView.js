@@ -47,6 +47,7 @@ define([
             $('.menu li a[href="#/author"]').parent().addClass('active');
             this.$el.html(authorTemplate);
             utils.checkIfLoggedIn();
+            former.init("elements", "form-content");
         }
     });
 
