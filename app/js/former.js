@@ -33,8 +33,9 @@ define([
   'jquery',
   'formerUtils',
   'text!templates/textFieldTemplate.html',
+  'text!templates/textareaFieldTemplate.html',
   'jqueryui'
-], function($, futils, textTemplate){
+], function($, futils, textTemplate, textareaTemplate){
 
     var choices = {
           "textAction": ["text", "Text"],
@@ -112,8 +113,6 @@ define([
 
     var myActions = {
         textAction : function(target, element, elements){
-            //var textimplementation = new TextImplementation(target, "Title", element, elements, "", null, null, null, 10);
-            //textimplementation.implement();
             var data = {
                 "i": 1,
                 "type": "text",
@@ -127,8 +126,18 @@ define([
             $("#"+target).append(_.template(textTemplate, data))
         },
         textareaAction : function(target, element, elements){
-            var textAreaimplementation = new TextAreaImplementation(target, "Description", element, elements);
-            textAreaimplementation.implement();
+            var data = {
+                "i": 1,
+                "type": "textarea",
+                "title": "Description",
+                "elements": elements,
+                "fields": {
+                    "placeholder": "Placeholder",
+                    "required": "required",
+                    "readonly": "readonly" 
+                }
+            };
+            $("#"+target).append(_.template(textareaTemplate, data))
         },
         warningAction : function(target, element, elements){
             var warningimplementation = new WarningImplementation(target, "WARNING", element, elements);

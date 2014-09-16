@@ -1,0 +1,8 @@
+<div class="fieldcontain" id="fieldcontain-textarea-'+i+'">
+  <label for="form-<%=type%>-<%=i%>"><%=title%></label>
+  <textarea name="form-<%=type%>-<%=i%>" id="form-<%=type%>-<%=i%>"
+    <% _.each(fields, function(val, key) { %>
+      <%=key%>="<%=val%>"
+    <% }); %>
+  ></textarea>
+</div>
