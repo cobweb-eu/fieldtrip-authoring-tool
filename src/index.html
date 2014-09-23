@@ -270,21 +270,28 @@
     var versions = config.versions.split(",");
 
     $(document).ready(function(){
+      estSSO();
+    });
+
+    function init(){
+      //resize a map
       $("#map_canvas").width(0.8*$(".span9").width());
       $("#map_canvas").height(0.45*$(window).height());
 
+      //pop up window for map
       $( "#dialog-map" ).dialog({
         autoOpen: false,
         height: 0.90*$(window).height(),
         width: 0.90*$(window).width(),
         modal: false
       });
-      
+
+      //dialog window for login
       $("#dialog-login").dialog({
         autoOpen: false,
         modal: false
       });
-      
+
       $("#dialog-upload").dialog({
         autoOpen: false,
         modal: false
@@ -300,11 +307,10 @@
       });
 
 
+      //get params of the url
       var params = getParams();
 
-      //Events
-      
-
+      //do the redirect after login
       $(document).on('click', '.redirect-me', function(){
         console.log($(this).attr("id"));
           provider = $(this).attr("id");
@@ -343,8 +349,7 @@
       }else if(screen.width <= 1200){
         $(".btn").removeClass('btn-large');
       }
-
-    });
+    }
 
     function initialize_app(oauth, provider, params){
       var options = {
@@ -420,9 +425,12 @@
       });
     }
 
-    function name(args) {
-      //code
-    }
+    function estSSO(){
+      var img = new Image();
+      img.crossorigin = "use-credentials";
+      img.src = config.baseurl+'secure/SD.png';
+      img.onload = init;
+    };
 
 
 
