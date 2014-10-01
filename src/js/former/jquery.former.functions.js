@@ -370,7 +370,7 @@ function limitChars(textid, limit, infodiv){
 }
 
 function previewCode(w, h){
-    return ('<iframe id="frame" src="/authoring/mobile.html" style="width: '+w+'px; height: '+h+'px;"></iframe>');
+    return ('<iframe id="frame" src="/cobweb-authoring-tool/mobile.html" style="width: '+w+'px; height: '+h+'px;"></iframe>');
 }
 
 function doPreview(id_dragged, id_iframe){

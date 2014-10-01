@@ -73,13 +73,10 @@
         //and enable all the buttons
         this.enableMainMenuEvents();
     
-        //load the editors from dropbox
+        //load the editors from PCAPI
         this.loadEditors();
         //and the example ones
         this.loadGalleryForms();
-    
-        //load the home page
-        //this.loadHomePage();
     
         //hide the edit elements initially
         this.showEditElements("map", false);
@@ -103,9 +100,7 @@
   
     BuildFormer.prototype.createMainMenu = function(){
         var menu = new Array();
-        menu.push('<li><a href="javascript:void(0)" id="home" class="menu-item">Home</a></li>');
         menu.push('<li><a href="javascript:void(0)" rel="tooltip" data-placement="bottom" data-original-title="Click here to create new form" id="create-form" class="menu-item">Create new form</a></li>');
-        menu.push('<li class="active"><a href="javascript:void(0)" rel="tooltip" data-placement="bottom" data-original-title="Click here to see your records" id="my-records" class="menu-item">Record Viewer</a></li>');
         menu.push('<li class="dropdown">');
         menu.push('<a href="javascript:void(0)" id="example-editors" rel="tooltip" data-placement="bottom" data-original-title="Click here to download some example forms" class="dropdown-toggle" data -toggle="dropdown">Editors Gallery <b class="caret"></b></a>');
         menu.push('<ul class="dropdown-menu" id="editors-gallery"></ul>');
@@ -120,7 +115,7 @@
         //menu.push('<li class="nav-header" id="leditors">Locally saved Editors</li>');
         menu.push('</ul></li>');
         menu.push('<li><a href="javascript:void(0)" id="layers" class="menu-item">Layers</a></li>');
-        menu.push('<li><a href="mailto:edina@ed.ac.uk" class="menu-item">Contact</a></li>');
+        menu.push('<li><a href="mailto:info@cobwebproject.eu" class="menu-item">Contact</a></li>');
         return menu;
     }
   
@@ -140,7 +135,6 @@
     
         this.enableHomeEvent();
         this.enableCreateFormEvent();
-        this.enableMapViewer();
         this.importEvent();
         this.enableImageViewer();
         this.enableLayersEvent();
@@ -410,18 +404,10 @@
     });
   }
   
-  //loading the editors from dropbox
+  //loading the editors from PCAPI
     BuildFormer.prototype.loadEditors = function(){
-        //dropbox editors
         var bformer = this;
         loading(true);
-        $.ajax({
-            url: this.buildUrl('auth'),
-            type: "GET",
-            success: function(response){
-                if(response.state == 1){
-                    $("#user-section").show();
-                    $(".username").text(response.name);
                     $.ajax({
                         type: "GET",
                         url: bformer.buildUrl("editors", "/"),
@@ -471,12 +457,6 @@
                             giveFeedback("There is a problem loading all the editors.");
                         }
                     });
-                }else{
-                    loading(false);
-                    giveFeedback("You need to refresh your page. The session with dropbox has problems!");
-                }
-            }
-        });
     }
     
     //loading the example editors
@@ -987,7 +967,7 @@
     }
     
     BuildFormer.prototype.buildUrl = function(path, ext){
-        var url = config.baseurl+this.version+'/pcapi/'+path+'/'+this.provider+'/'+this.options.oauth;
+        var url = config.baseurl+ "private/" + this.version+ '/pcapi/fs/local/' + path;
         if(ext){
             url = url+ext;
         }
