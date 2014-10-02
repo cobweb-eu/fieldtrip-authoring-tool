@@ -388,7 +388,7 @@ function doPreview(id_dragged, id_iframe){
     
     $("#frame").load(function(){
         $$ = jQuery = window.frames[0].jQuery;
-        $$("#home-content").append(code).trigger("create");
+        $$("#home-content").html(code).trigger("create");
         
         var finds = $$("#home-content").find('.button-wrapper');
         for(var i=0;i<finds.length; i++){

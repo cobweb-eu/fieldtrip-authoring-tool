@@ -79,7 +79,7 @@
         this.loadGalleryForms();
     
         //hide the edit elements initially
-        this.showEditElements("map", false);
+        this.showEditElements("home", false);
     
         //add html for the edit menu
         editmenu_id.find('.container').append(this.createEditMenu().join(""));
@@ -494,7 +494,7 @@
             url: "home.html",
             dataType: "html",
             success: function(data){
-                $("#home-content").append(data);
+                $("#home-content").html(data);
             }
         });
     }

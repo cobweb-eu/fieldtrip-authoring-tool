@@ -310,11 +310,8 @@
         url: "home.html",
         dataType: "html",
         success: function(data){
-          $("#home-content").append(data);
+          $("#home-content").html(data);
           
-          //if(uid != 0){
-          //  $("#login-paragraph").hide("fast");
-          //}
         }
       });
     }

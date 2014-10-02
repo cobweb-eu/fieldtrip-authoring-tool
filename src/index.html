@@ -124,12 +124,7 @@
             </div>
             <div id="f_title"></div>
             <div id="form-content"></div>
-            <div id="content">
-		<h2><img src="img/cobweb_logo.png"></h2>
-    			<p> Welcome to the COBWEB Author.  </p>
-    			<p style="text-align: justify;"> This is the desktop browser application that complements the  COBWEB Mobile App available for iPhone and iPad in the iTunes App Store and for Android in Google Play Store.  </p>
-    			<p style="text-align: justify;"> TODO </p>
-	     </div>
+            <div id="home-content"></div>
           </div>
         </div><!--/span-->
       </div><!--/row-->
@@ -174,9 +169,9 @@
         modal: false
       });
 
-        var url = config.baseurl+ "private/" + versions[versions.length - 1]+"/pcapi/auth/"+provider;
-
         initialize_app();
+
+	loadHomePage();
 
       if(screen.width < 768){
         $("#fat-menu").hide();
@@ -212,6 +207,17 @@
       };
 
       $("#form-content").buildformer(options);
+    }
+
+
+    function loadHomePage (){
+        $.ajax({
+            url: "home.html",
+            dataType: "html",
+            success: function(data){
+                $("#home-content").html(data);
+            }
+        });
     }
 
   </script>
