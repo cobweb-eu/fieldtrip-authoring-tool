@@ -111,7 +111,7 @@
         menu.push('<ul class="dropdown-menu" id="editors-gallery"></ul>');
         menu.push('</li>');
         menu.push('<li class="dropdown">');
-        menu.push('<a href="javascript:void(0)" class="dropdown-toggle" data-toggle="dropdown" rel="tooltip" data-placement="bottom" data-original-title="Click here to download your custom forms" id="    my-editors">My Editors <b class="caret"></b></a>');
+        menu.push('<a href="javascript:void(0)" class="dropdown-toggle" data-toggle="dropdown" rel="tooltip" data-placement="bottom" data-original-title="Click here to download your custom forms" id="my-editors">My Editors <b class="caret"></b></a>');
         menu.push('<ul class="dropdown-menu" id="forms">');
         menu.push('<li><a href="javascript:void(0)" id="import">Import</a></li>');
         menu.push('<li class="divider"></li>');
@@ -161,7 +161,7 @@
         }, this));
         
         var file;
-        var url = this.buildUrl("tiles", "/")
+        var url = this.buildUrl("layers", "/")
 
         // Set an event listener on the Choose File field.
         $('#fileselect').bind("change", function(e) {
@@ -720,7 +720,7 @@
         }
         code = code.replace('"', '\"');
         var text_code = new Array();
-        text_code.push('<form id=\"form'+rand_number+'\" data-ajax=\"false\">\n')
+        text_code.push('<form id=\"form'+rand_number+'\" data-ajax=\"false\" novalidate>\n')
         text_code.push(code);
         name = replaceSpace(simplify_name(name));
         text_code.push('\n<div id=\"'+name.toLowerCase()+'-buttons\" class=\"fieldcontain ui-grid-a\">');
