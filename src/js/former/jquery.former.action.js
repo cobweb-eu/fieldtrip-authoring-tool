@@ -73,5 +73,9 @@
     rangeAction : function(target, element, elements){
       var textimplementation = new TextImplementation(target, "Range", element, elements, "", 1, 0, 10, 10);
       textimplementation.implement();
+    },
+    dtreeAction: function(target, element, elements){
+      var dtreeImplementation = new DTreeImplementation(target);
+      dtreeImplementation.implement();
     }
   }

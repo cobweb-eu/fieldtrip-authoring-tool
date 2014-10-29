@@ -26,7 +26,8 @@
             "photoAction": ["image", "Photo"],
             "audioAction": ["audio", "Audio"],
             "buttonAction": ["btn", "Button"],
-            "warningAction": ["warning", "Warning"]
+            "warningAction": ["warning", "Warning"],
+            "dtreeAction": ["dtree", "Decision Tree"]
         }
     };
   
