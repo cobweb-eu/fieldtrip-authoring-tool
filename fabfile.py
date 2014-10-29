@@ -2,6 +2,7 @@ from fabric.api import env, put, run, task, local, sudo, prompt, lcd, settings
 from fabric.contrib.project import rsync_project
 import datetime, os, json, ast, ConfigParser
 from jinja2 import Environment, PackageLoader, FileSystemLoader
+import re
 
 CURRENT_PATH = os.path.abspath(os.path.dirname(__file__))
 PROJ4JS_VERSION = "1.1.0"
@@ -33,8 +34,7 @@ def install(app='src'):
     bower = json.loads(open('bower.json').read())
 
     # generate config js
-    generate_config_js(version=versions['project'],
-                       fetch_config=False)
+    generate_config_js()
 
 
     def _get_dest_path(path):

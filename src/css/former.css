@@ -208,3 +208,7 @@ hr.style-one {
 #download_images{
   clear: both;
 }
+
+#form-content{
+  overflow-y:scroll;
+}
