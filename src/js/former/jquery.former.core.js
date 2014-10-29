@@ -40,6 +40,7 @@
         this.version = this.options.version;
         this.provider = this.options.provider;
         this.image_pages = undefined;
+        this.uuid = this.options.oauth;
     }
   
     BuildFormer.prototype.defaults = {
@@ -63,9 +64,17 @@
   
     //initialize function
     BuildFormer.prototype.init = function(){
-        var config = this.options;
-        var main_menu = $("#"+config.mainmenu_id);
-        var editmenu_id = $("#"+ config.editmenu_id);
+        var _config = this.options;
+        var main_menu = $("#"+_config.mainmenu_id);
+        var editmenu_id = $("#"+ _config.editmenu_id);
+        
+        pcapi.init({
+            "url": config.baseurl,
+            "version": config.versions
+        });
+        console.log(_config)
+        pcapi.setProvider(_config.provider);
+        pcapi.setCloudLogin(_config.oauth);
         
         //add html for the main menu
         main_menu.html(this.createMainMenu().join(""));
@@ -73,8 +82,8 @@
         //and enable all the buttons
         this.enableMainMenuEvents();
     
-        //load the editors from dropbox
-        this.loadEditors();
+        //load the editors from server
+        this.initEditors();
         //and the example ones
         this.loadGalleryForms();
     
@@ -82,14 +91,15 @@
         //this.loadHomePage();
     
         //hide the edit elements initially
-        this.showEditElements("map", false);
+        //this.showEditElements("form", true);
+        $("#create-form").trigger('click');
     
         //add html for the edit menu
         editmenu_id.find('.container').append(this.createEditMenu().join(""));
         $("#screen").html(this.createSelectMenu().join(""));
         $("#edit-buttons").html(this.createCodeMenu().join(""));
         this.createElementsMenu();
-        //and enable events
+        //and enable eventsd
         this.enableSelectMenuEvents();
         this.enableCodeMenuEvents();
         //the events of dragging, dropping, sorting, editing and deleting the elements
@@ -104,8 +114,8 @@
     BuildFormer.prototype.createMainMenu = function(){
         var menu = new Array();
         menu.push('<li><a href="javascript:void(0)" id="home" class="menu-item">Home</a></li>');
-        menu.push('<li><a href="javascript:void(0)" rel="tooltip" data-placement="bottom" data-original-title="Click here to create new form" id="create-form" class="menu-item">Create new form</a></li>');
-        menu.push('<li class="active"><a href="javascript:void(0)" rel="tooltip" data-placement="bottom" data-original-title="Click here to see your records" id="my-records" class="menu-item">Record Viewer</a></li>');
+        menu.push('<li class="active"><a href="javascript:void(0)" rel="tooltip" data-placement="bottom" data-original-title="Click here to create new form" id="create-form" class="menu-item">Create new form</a></li>');
+        //menu.push('<li class="active"><a href="javascript:void(0)" rel="tooltip" data-placement="bottom" data-original-title="Click here to see your records" id="my-records" class="menu-item">Record Viewer</a></li>');
         menu.push('<li class="dropdown">');
         menu.push('<a href="javascript:void(0)" id="example-editors" rel="tooltip" data-placement="bottom" data-original-title="Click here to download some example forms" class="dropdown-toggle" data -toggle="dropdown">Editors Gallery <b class="caret"></b></a>');
         menu.push('<ul class="dropdown-menu" id="editors-gallery"></ul>');
@@ -120,7 +130,7 @@
         //menu.push('<li class="nav-header" id="leditors">Locally saved Editors</li>');
         menu.push('</ul></li>');
         menu.push('<li><a href="javascript:void(0)" id="layers" class="menu-item">Layers</a></li>');
-        menu.push('<li><a href="mailto:edina@ed.ac.uk" class="menu-item">Contact</a></li>');
+        menu.push('<li><a href="mailto:info@cobwebproject.eu" class="menu-item">Contact</a></li>');
         return menu;
     }
   
@@ -142,7 +152,7 @@
         this.enableCreateFormEvent();
         this.enableMapViewer();
         this.importEvent();
-        this.enableImageViewer();
+        //this.enableImageViewer();
         this.enableLayersEvent();
     }
   
@@ -161,43 +171,36 @@
         }, this));
         
         var file;
-        var url = this.buildFSUrl("layers", "/")
 
+        $('#fileselect').unbind();
         // Set an event listener on the Choose File field.
         $('#fileselect').bind("change", function(e) {
             var files = e.target.files || e.dataTransfer.files;
             // Our file var now holds the selected file
             file = files[0];
         });
-    
+
         // This function is called when the user clicks on Upload to Parse. It will create the REST API request to upload this image to Parse.
         $('#uploadbutton').click(function() {
-            var serverUrl = url + file.name;
+            var options = {
+                "remoteDir": "layers",
+                "filename": file.name,
+                "file": file
+            };
             loading(true);
-            $.ajax({
-                type: "POST",
-                beforeSend: function(request) {
-                    request.setRequestHeader("X-Parse-Application-Id", 'MY-APP-ID');
-                    request.setRequestHeader("X-Parse-REST-API-Key", 'MY-REST-API-ID');
-                    request.setRequestHeader("Content-Type", file.type);
-                },
-                url: serverUrl,
-                data: file,
-                processData: false,
-                contentType: false,
-                success: function(data) {
+            pcapi.uploadFile(options, function(result, data){
+                if(result){
+                    $("#dialog-upload").dialog("close");
                     alert("File was uploaded");
-                    loading(false);
-                },
-                error: function(data) {
-                    var obj = jQuery.parseJSON(data);
-                    alert(obj.error);
-                    loading(false);
                 }
+                else{
+                    alert("There was an error");
+                }
+                loading(false);
             });
         });
-    }
-  
+    };
+
     //event for creating a form from scratch
     BuildFormer.prototype.enableCreateFormEvent = function(){
         $("#create-form").click($.proxy(function(){
@@ -281,91 +284,91 @@
     /**
      * function for displaying the images on the viewer
      */
-    BuildFormer.prototype.enableImageViewer = function(){
-        var bformer = this;
-        var pages = this.image_pages;
-        //after clicking the btn
-        $("#image-view").click($.proxy(function(){
-            loading(true);
-            //get all images in url format
-            $.ajax({
-                type: "GET",
-                url: this.buildUrl("records", "/assets/images/"),
-                data: "frmt=url",
-                dataType: "json",
-                success: function(data){
-                    loading(false);
-                    //find the the width of the screen
-                    var w = 0.90*$(window).width();
-                    var h = 0.50*$(window).height();
-                    /*if(pages){
-                        var size=0;
-                        for(var key in pages){
-                            size += pages[key].length;
-                        }
-                        if(size != data.records.length){
-                            makeWindow('viewer.html', 'Image Viewer', w, h, "image-window", null, 2000, "middle");
-                            bformer.createImageViewer(data.records, pages);
-                        }else{
-                            $("#image-window").dialog("open");
-                        }
-                    }else{*/
-                        makeWindow('viewer.html', 'Image Viewer', w, h, "image-window", null, 2000, "middle");
-                        pages = new Object();
-                        bformer.createImageViewer(data.records, pages);
-                    //}
-                    
-                    
-                }
-            });
-        }, this));
-    }
+    //BuildFormer.prototype.enableImageViewer = function(){
+    //    var bformer = this;
+    //    var pages = this.image_pages;
+    //    //after clicking the btn
+    //    $("#image-view").click($.proxy(function(){
+    //        loading(true);
+    //        //get all images in url format
+    //        $.ajax({
+    //            type: "GET",
+    //            url: this.buildUrl("records", "/assets/images/"),
+    //            data: "frmt=url",
+    //            dataType: "json",
+    //            success: function(data){
+    //                loading(false);
+    //                //find the the width of the screen
+    //                var w = 0.90*$(window).width();
+    //                var h = 0.50*$(window).height();
+    //                /*if(pages){
+    //                    var size=0;
+    //                    for(var key in pages){
+    //                        size += pages[key].length;
+    //                    }
+    //                    if(size != data.records.length){
+    //                        makeWindow('viewer.html', 'Image Viewer', w, h, "image-window", null, 2000, "middle");
+    //                        bformer.createImageViewer(data.records, pages);
+    //                    }else{
+    //                        $("#image-window").dialog("open");
+    //                    }
+    //                }else{*/
+    //                    makeWindow('viewer.html', 'Image Viewer', w, h, "image-window", null, 2000, "middle");
+    //                    pages = new Object();
+    //                    bformer.createImageViewer(data.records, pages);
+    //                //}
+    //                
+    //                
+    //            }
+    //        });
+    //    }, this));
+    //}
     
-    BuildFormer.prototype.createImageViewer = function(records, pages){
-        var urls = new Array();
-        //number of pages
-        var pages_n = 0;
-        for(var i=0; i<records.length;i++){
-            //the name of th record
-            var title = records[i].split("/")[0];
-            //the url of the image
-            var url = this.buildUrl("records", "/")+records[i];
-            //the thumb url of the image
-            var thumb_url = this.buildUrl("records", "/")+records[i].replace(".", "_thumb.");
-            urls.push('<div class="img-item"><a rel="gallery-'+pages_n+'" href="'+url+'" class="swipebox" title="'+title+'"><img src="'+thumb_url+'" onerror="imgError(this);" class="img_thumb"><p>'+title+'</p></a></div>');
-            
-            //if we are at the last record and is less than ten then make a new page
-            if(records.length == i+1){
-                pages_n++;
-                pages["page"+pages_n] = urls;
-            }else if((i+1) % 10 == 0){ //if we had 10 records change page
-                pages_n++;
-                pages["page"+pages_n] = urls;
-                urls = new Array();
-            }
-        }
-        //build paginator
-        $("#pagination").jPaginator({
-            nbPages: pages_n,
-            selectedPage:1,
-            nbVisible:6,
-            marginPx:4,
-            overBtnLeft:'#test2_o_left',
-            overBtnRight:'#test2_o_right',
-            maxBtnLeft:'#test2_m_left',
-            maxBtnRight:'#test2_m_right',
-            withAcceleration:false,
-            minSlidesForSlider:5,
-            onPageClicked: function(a,num) {
-                //add the thumbs on the dialog
-                $("#thumbs").html(pages["page"+num].join(""));
-                $(".swipebox").swipebox();
-            }
-        });
-        
-        var download_url = this.buildUrl("records", "/assets/images/?frmt=zip");
-        $("#download_images").html('<a href="'+download_url+'" target="blank" class="btn">Download images</a>');
-    }
+    //BuildFormer.prototype.createImageViewer = function(records, pages){
+    //    var urls = new Array();
+    //    //number of pages
+    //    var pages_n = 0;
+    //    for(var i=0; i<records.length;i++){
+    //        //the name of th record
+    //        var title = records[i].split("/")[0];
+    //        //the url of the image
+    //        var url = this.buildUrl("records", "/")+records[i];
+    //        //the thumb url of the image
+    //        var thumb_url = this.buildUrl("records", "/")+records[i].replace(".", "_thumb.");
+    //        urls.push('<div class="img-item"><a rel="gallery-'+pages_n+'" href="'+url+'" class="swipebox" title="'+title+'"><img src="'+thumb_url+'" onerror="imgError(this);" class="img_thumb"><p>'+title+'</p></a></div>');
+    //        
+    //        //if we are at the last record and is less than ten then make a new page
+    //        if(records.length == i+1){
+    //            pages_n++;
+    //            pages["page"+pages_n] = urls;
+    //        }else if((i+1) % 10 == 0){ //if we had 10 records change page
+    //            pages_n++;
+    //            pages["page"+pages_n] = urls;
+    //            urls = new Array();
+    //        }
+    //    }
+    //    //build paginator
+    //    $("#pagination").jPaginator({
+    //        nbPages: pages_n,
+    //        selectedPage:1,
+    //        nbVisible:6,
+    //        marginPx:4,
+    //        overBtnLeft:'#test2_o_left',
+    //        overBtnRight:'#test2_o_right',
+    //        maxBtnLeft:'#test2_m_left',
+    //        maxBtnRight:'#test2_m_right',
+    //        withAcceleration:false,
+    //        minSlidesForSlider:5,
+    //        onPageClicked: function(a,num) {
+    //            //add the thumbs on the dialog
+    //            $("#thumbs").html(pages["page"+num].join(""));
+    //            $(".swipebox").swipebox();
+    //        }
+    //    });
+    //    
+    //    var download_url = this.buildUrl("records", "/assets/images/?frmt=zip");
+    //    $("#download_images").html('<a href="'+download_url+'" target="blank" class="btn">Download images</a>');
+    //}
     
     //the dialog for uploadig an edtr
     BuildFormer.prototype.importEvent = function(){
@@ -410,71 +413,80 @@
     });
   }
   
-  //loading the editors from dropbox
-    BuildFormer.prototype.loadEditors = function(){
-        //dropbox editors
+  //loading the editors from server
+    BuildFormer.prototype.initEditors = function(){
+        //server editors
         var bformer = this;
         loading(true);
-        $.ajax({
-            url: this.buildUrl('auth'),
-            type: "GET",
-            success: function(response){
-                if(response.state == 1){
+        pcapi.checkLogin(function(result, data){
+            if(result){
+                if(data.state === 1){
                     $("#user-section").show();
-                    $(".username").text(response.name);
-                    $.ajax({
-                        type: "GET",
-                        url: bformer.buildUrl("editors", "/"),
-                        dataType: "json",
-                        success: function(data){
-                            var form_links = new Array();
-                            var by_editor = new Array();
-                            var editors = data.metadata;
-                            by_editor.push('<option value="" selected="selected">All</option>');
-                            by_editor.push('<option value="text.edtr">text.edtr</option>');
-                            by_editor.push('<option value="image.edtr">image.edtr</option>');
-                            by_editor.push('<option value="audio.edtr">audio.edtr</option>');
-                            if(editors != undefined){
-                                for(var i=0; i<editors.length; i++){
-                                    var name = editors[i].split("/")[2];
-                                    form_links.push('<li><a tabindex="-1" href="javascript: void(0)" class="get-form" title="'+name+'">'+name+'</a></li>');
-                                    by_editor.push('<option value="'+name+'">'+name+'</option>');
-                                }
-                            }
-                        
-                            $(".get-form").remove();
-                            $("#deditors").after(form_links.join(""));
-                            $("#by-editor").html(by_editor.join(""));
-                            loading(false);
-                        
-                            $(".get-form").click(function(){
-                                var title = this.title.split(".")[0];
-                                loading(true);
-                                $.ajax({
-                                    type: "GET",
-                                    url: bformer.buildUrl("editors", "/"+this.title),
-                                    dataType: "text",
-                                    success: function(data){
-                                        bformer.appendExistingEditor(data, true, title);
-                                        bformer.enableActionButtons(false, false, false);
-                                        loading(false);
-                                    },
-                                    error: function(jqXHR, status, error){
-                                        loading(false);
-                                        giveFeedback("The editor is not valid.");
-                                    }
-                                });
-                            });
-                        },
-                        error: function(jqXHR, status, error){
-                            loading(false);
-                            giveFeedback("There is a problem loading all the editors.");
-                        }
-                    });
-                }else{
-                    loading(false);
-                    giveFeedback("You need to refresh your page. The session with dropbox has problems!");
+                    $(".username").text(data.name);
+                    bformer.loadEditors();
                 }
+                else{
+                    giveFeedback("There is a problem loading all the editors.");
+                }
+            }
+            else{
+                giveFeedback("You need to refresh your page. The session with the provider has problems!");
+            }
+            loading(false);
+        });
+    };
+
+    BuildFormer.prototype.loadEditors = function(){
+        var options = {
+            "remoteDir": "editors"
+        };
+        var bformer = this;
+        pcapi.getItems(options, function(result, data){
+            if(result){
+                var form_links = new Array();
+                var by_editor = new Array();
+                var editors = data.metadata;
+                by_editor.push('<option value="" selected="selected">All</option>');
+                by_editor.push('<option value="text.edtr">text.edtr</option>');
+                by_editor.push('<option value="image.edtr">image.edtr</option>');
+                by_editor.push('<option value="audio.edtr">audio.edtr</option>');
+                if(editors != undefined){
+                    for(var i=0; i<editors.length; i++){
+                        var name = editors[i].replace(/\/editors\/\/?/g, '');
+                        if(name.indexOf(".edtr") > -1){
+                            form_links.push('<li><a tabindex="-1" href="javascript: void(0)" class="get-form" title="'+name+'">'+name+'</a></li>');
+                            by_editor.push('<option value="'+name+'">'+name+'</option>');
+                        }
+                    }
+                }
+            
+                $(".get-form").remove();
+                $("#deditors").after(form_links.join(""));
+                $("#by-editor").html(by_editor.join(""));
+                loading(false);
+            
+                $(".get-form").click(function(){
+                    var title = this.title.split(".")[0];
+                    var options = {
+                        "remoteDir": "editors",
+                        "item": this.title 
+                    };
+                    loading(true);
+                    pcapi.getItem(options, function(result, data){
+                        if(result){
+                            bformer.appendExistingEditor(data, true, title);
+                            bformer.enableActionButtons(false, false, false);
+                        }
+                        else{
+                            giveFeedback("The editor is not valid.");
+                        }
+                        loading(false);
+                    });
+                });
+            }
+            else{
+                loading(false);
+                giveFeedback("There is a problem loading all the editors.");
             }
         });
     }
@@ -514,7 +526,7 @@
             url: "home.html",
             dataType: "html",
             success: function(data){
-                $("#home-content").append(data);
+                $("#home-content").html(data);
             }
         });
     }
@@ -582,27 +594,27 @@
         $("#save").click($.proxy(function(){
             var bformer = this;
             if($("#form_title").text().length === 0){
-                //give feedback here with a modal window
-                //giveFeedback("You need to give a name your form in order to synchronize it!");
                 this.showFormName();
             }else{
-                var text_code = this.prepareCode();
+                var options = {
+                    remoteDir: "editors",
+                    item: {
+                        name: encodeURIComponent($("#form_title").text()),
+                        editor: this.prepareCode()
+                    }
+                };
                 loading(true);
-                $.ajax({
-                    url: bformer.buildUrl("editors", '/'+encodeURIComponent($("#form_title").text()+'.edtr')),
-                    type: 'PUT',
-                    data: text_code.join(""),
-                    success: function(data) {
+                pcapi.updateItem(options, function(result, data){
+                    if(result){
                         giveFeedback("Your form has been uploaded");
-                        bformer.loadEditors();
+                        bformer.initEditors();
                         bformer.addEditButtons();
                         bformer.updateSyncStatus(true);
-                        loading(false);
-                    },
-                    error: function(jqXHR, textStatus, errorThrown){
-                        loading(false);
-                        giveFeedback("There was an error with your synchronization with dropbox.");
                     }
+                    else{
+                        giveFeedback("There was an error with your synchronization with server.");
+                    }
+                    loading(false);
                 });
             }
         }, this));
@@ -610,29 +622,24 @@
         $("#synch").click($.proxy(function(){
             var bformer = this;
             if($("#form_title").text().length === 0){
-                //give feedback here with a modal window
-                //giveFeedback("You need to give a name your form in order to synchronize it!");
                 this.showFormName();
             }else{
-                var text_code = this.prepareCode();
+
+                var item = {
+                    name: encodeURIComponent($("#form_title").text()),
+                    editor: this.prepareCode()
+                };
                 loading(true);
-                $.ajax({
-                    url: bformer.buildUrl("editors", '/'+encodeURIComponent($("#form_title").text()+'.edtr')),
-                    type: 'POST',
-                    cache: false,
-                    data: text_code.join(""),
-                    success: function(data) {
-                        if(data.error == 0){
-                            giveFeedback("Your form has been uploaded");
-                            bformer.loadEditors();
-                            //bformer.clearAll();
-                            //bformer.createMandatoryElement();
-                            bformer.updateSyncStatus(true);
-                        }else{
-                            giveFeedback(data.msg);
-                        }
-                        loading(false);
+                pcapi.saveItem(this.options.oauth, "editors", item, function(result, data){
+                    if(result){
+                        giveFeedback("Your form has been uploaded");
+                        bformer.initEditors();
+                        bformer.updateSyncStatus(true);
                     }
+                    else{
+                        giveFeedback(data.msg);
+                    }
+                    loading(false);
                 });
             }
         }, this));
@@ -640,20 +647,17 @@
         $("#delete").click($.proxy(function(){
             var bformer = this;
             loading(true);
-            $.ajax({
-                url: bformer.buildUrl('editors', '/'+escape($("#form_title").text()+'.edtr')),
-                type: 'DELETE',
-                success: function(data) {
+            pcapi.deleteItem("editors", escape($("#form_title").text()), function(result, data){
+                if(result){
                     giveFeedback("Your form has been deleted");
-                    bformer.loadEditors();
+                    bformer.initEditors();
                     bformer.clearAll();
                     bformer.createMandatoryElement();
-                    loading(false);
-                },
-                error: function(jqXHR, textStatus, errorThrown){
-                    loading(false);
-                    giveFeedback("There was an error with your synchronization with dropbox.");
                 }
+                else{
+                    giveFeedback("There was an error with your synchronization with the provider.");
+                }
+                loading(false);
             });
         }, this));
     };
@@ -988,6 +992,14 @@
     
     BuildFormer.prototype.buildUrl = function(path, ext){
         var url = config.baseurl+this.version+'/pcapi/'+path+'/'+this.provider+'/'+this.options.oauth;
+        if(ext){
+            url = url+ext;
+        }
+        return url;
+    }
+
+    BuildFormer.prototype.buildFSUrl = function(path, ext){
+        var url = config.baseurl+this.version+'/pcapi/fs/'+this.provider+'/'+this.options.oauth+'/'+path;
         if(ext){
             url = url+ext;
         }
