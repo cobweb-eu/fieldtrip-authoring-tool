@@ -31,7 +31,7 @@ DAMAGE.
 
 "use strict";
 
-var pcapi = (function(config){
+var pcapi = (function(){
 
     /**
      * Unset user login id.
@@ -361,11 +361,6 @@ var pcapi = (function(config){
                     callback(false);
                 }
             });
-        },
-
-
-        getAnonymousUserId: function(){
-          return config.pcapianonymous || null;
         },
 
         /**

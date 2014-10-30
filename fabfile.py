@@ -9,7 +9,7 @@ PROJ4JS_VERSION = "1.1.0"
 
 config = None
 
-
+@task
 def install(app='src'):
     bower_home = os.sep.join((CURRENT_PATH, 'bower_components'))
     with lcd(CURRENT_PATH):
@@ -120,7 +120,7 @@ def _check_command(cmd):
             print '{0} needs to be installed and in your path'.format(cmd)
             exit(0)
 
-
+@task
 def server(server='beta'):
     """Defines server environment"""
     env.hosts = [_config('hosts', section=server),]
@@ -129,6 +129,7 @@ def server(server='beta'):
     env.html_current_path = _config('html_path')
     env.port = _config('port', section=server)
     _set_server()
+    generate_config_js(section='config_{0}'.format(server))
 
 def _set_server():
     """Defines devel environment"""
@@ -140,13 +141,16 @@ def _set_server():
     env.releases_path = "%(domain_path)s/releases" % { 'domain_path':env.domain_path }
     env.app_local = "./%(app_name)s" % { 'app_name':env.app_local_name }
 
-def setup():
+@task
+def _setup():
     """Prepare server for deployment"""
     run("mkdir -p %(domain_path)s" % { 'domain_path':env.domain_path })
     run("mkdir -p %(releases_path)s" % { 'releases_path':env.releases_path })
 
+@task
 def deploy():
     """Deploys your project, updates the virtual env then restarts"""
+    _setup()
     _update()
 
 def _update():
@@ -183,6 +187,8 @@ def _find_version():
             print "Don't forget to run the command <git stash pop> after the app is installed"
         else:
             refspec = prompt('Create dev folder to build in [e.g. dev]: ')
+        if refspec == "":
+            refspec = "dev"
     return refspec
 
 def _symlink():
@@ -197,7 +203,8 @@ def _symlink():
 
 
 ###Configuration
-def generate_config_js(version=None, fetch_config=True):
+@task
+def generate_config_js(section='config', fetch_config=True):
     """ generate config.js """
     root, proj_home, src_dir = _get_source()
 
@@ -205,25 +212,26 @@ def generate_config_js(version=None, fetch_config=True):
         _check_config()
 
     # using config initialises it
-    _config('baseurl', 'config')
+    _config('baseurl', section)
 
     ## convert items list into dictionary
     values = {}
-    versions = {}
     # #for entry in config.items('app'):
-    for entry in config.items('config'):
+    for entry in config.items(section):
         print entry
         values[str(entry[0])] = str(entry[1])
-       # for versionNo in config.get("config", "versions").split(","):
-          #  print "version : " + versionNo
-          #  versions = versionNo
     templates = os.sep.join((src_dir, 'templates'))
-    #values['version'] = versions
     out_file = os.sep.join((src_dir, 'js', 'config.js'))
     environ = Environment(loader=FileSystemLoader(templates))
     template = environ.get_template("config.js")
     output = template.render(config=values)
     _write_data(out_file, output)
+
+def upload_js_conf():
+    env.some_test_var = 'this is the test var '
+    source_file = '/vagrant/fabric/templates/test_templatate'
+    destination_file = '/home/123'
+    files.upload_template(source_file, destination_file, context=env, mode=0777)
 
 
 def _get_source(app='android'):
