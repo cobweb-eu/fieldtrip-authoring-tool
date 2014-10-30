@@ -60,17 +60,12 @@
           }
       });
 
-      //if ("oauth_token" in params && params["oauth_token"] !== undefined) {
-      //  initialize_app(params["oauth_token"], localStorage.getItem("provider"), params);
-      //}else
       var group = 'd6d0177e-0f8e-75d1-6052-2ab59d96a6cd';
-      if ("group" in params && params["group"] !== undefined) {
-        console.log(params["uid"])
-        initialize_app(params["uid"], localStorage.getItem("provider"), params);
+      if ("sid" in params && params["sid"] !== undefined) {
+        initialize_app('00000000-0000-0000-0000-000000000000', 'local', params);
       }
-      //else{
-        loadHomePage();
-      //}
+
+      loadHomePage();
 
       if(screen.width < 768){
         $("#fat-menu").hide();
@@ -119,10 +114,6 @@
             dataType: "html",
             success: function(data){
                 $("#home-content").append(data);
-          
-                //if(uid != 0){
-                //  $("#login-paragraph").hide("fast");
-                //}
             }
         });
     }
