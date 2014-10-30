@@ -77,5 +77,9 @@
     dtreeAction: function(target, element, elements){
       var dtreeImplementation = new DTreeImplementation(target);
       dtreeImplementation.implement();
+    },
+    layersAction: function(target, element, elements){
+      var layersImplementation = new LayersImplementation(target);
+      layersImplementation.implement();
     }
   }

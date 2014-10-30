@@ -59,7 +59,9 @@
             "photoAction": ["image", "Photo"],
             "audioAction": ["audio", "Audio"],
             "buttonAction": ["btn", "Button"],
-            "warningAction": ["warning", "Warning"]
+            "warningAction": ["warning", "Warning"],
+            "dtreeAction": ["dtree", "Decision Tree"],
+            "layersAction": ["layers", "Layers"]
         }
     }
   
@@ -130,7 +132,7 @@
         //menu.push('<li class="divider"></li>');
         //menu.push('<li class="nav-header" id="leditors">Locally saved Editors</li>');
         menu.push('</ul></li>');
-        menu.push('<li><a href="javascript:void(0)" id="layers" class="menu-item">Layers</a></li>');
+        //menu.push('<li><a href="javascript:void(0)" id="layers" class="menu-item">Layers</a></li>');
         menu.push('<li><a href="mailto:info@cobwebproject.eu" class="menu-item">Contact</a></li>');
         return menu;
     }
@@ -154,7 +156,6 @@
         this.enableMapViewer();
         this.importEvent();
         //this.enableImageViewer();
-        this.enableLayersEvent();
     }
   
     //the event of the home button, it hides all the edit menus and shows the home content
@@ -164,43 +165,6 @@
             this.showEditElements("home", false);
         }, this));
     }
-    
-    //the event of the home button, it hides all the edit menus and shows the home content
-    BuildFormer.prototype.enableLayersEvent = function(){
-        $("#layers").click($.proxy(function(){
-            $("#dialog-upload").dialog("open");
-        }, this));
-        
-        var file;
-
-        $('#fileselect').unbind();
-        // Set an event listener on the Choose File field.
-        $('#fileselect').bind("change", function(e) {
-            var files = e.target.files || e.dataTransfer.files;
-            // Our file var now holds the selected file
-            file = files[0];
-        });
-
-        // This function is called when the user clicks on Upload to Parse. It will create the REST API request to upload this image to Parse.
-        $('#uploadbutton').click(function() {
-            var options = {
-                "remoteDir": "layers",
-                "filename": file.name,
-                "file": file
-            };
-            loading(true);
-            pcapi.uploadFile(options, function(result, data){
-                if(result){
-                    $("#dialog-upload").dialog("close");
-                    alert("File was uploaded");
-                }
-                else{
-                    alert("There was an error");
-                }
-                loading(false);
-            });
-        });
-    };
 
     //event for creating a form from scratch
     BuildFormer.prototype.enableCreateFormEvent = function(){

@@ -4,9 +4,7 @@ var DTreeImplementation = function(target){
 
 DTreeImplementation.prototype.implement = function(){
     if($("#"+this.target).find("#fieldcontain-dtree").length===0){
-        $("#layers").trigger('click');
-        $("#uploadbutton").addClass('hidden');
-        $("#upload-button-dtree").removeClass('hidden');
+        $("#dialog-upload").dialog("open");
     
         var file;
         $('#fileselect').unbind();
@@ -17,7 +15,8 @@ DTreeImplementation.prototype.implement = function(){
             file = files[0];
         });
         
-        $("#upload-button-dtree").click($.proxy(function(){
+        $("#upload-button").unbind('click');
+        $("#upload-button").click($.proxy(function(){
             if($("#form_title").text() === file.name.split(".")[0]){
                 var options = {
                     "remoteDir": "editors",

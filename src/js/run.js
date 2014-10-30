@@ -102,7 +102,8 @@
           "photoPointAction": ["image", "Image with Point"],
           "audioAction": ["audio", "Audio Capture"],
           "warningAction": ["warning", "Warning Message"],
-          "dtreeAction": ["dtree", "Decision Tree"]
+          "dtreeAction": ["dtree", "Decision Tree"],
+          "layersAction": ["layers", "Layers"]
         }
       };
 
