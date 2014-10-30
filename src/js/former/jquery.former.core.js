@@ -591,6 +591,7 @@
             }
           }
         });
+        var name = $("#form_title").text();
         
         $("#save").click($.proxy(function(){
             var bformer = this;
@@ -600,8 +601,8 @@
                 var options = {
                     remoteDir: "editors",
                     item: {
-                        name: encodeURIComponent($("#form_title").text()),
-                        editor: this.prepareCode()
+                        name: encodeURIComponent(name),
+                        editor: this.prepareCode(name)
                     }
                 };
                 loading(true);
@@ -627,8 +628,8 @@
             }else{
 
                 var item = {
-                    name: encodeURIComponent($("#form_title").text()),
-                    editor: this.prepareCode()
+                    name: encodeURIComponent(name),
+                    editor: this.prepareCode(name)
                 };
                 loading(true);
                 pcapi.saveItem(this.options.oauth, "editors", item, function(result, data){
@@ -648,7 +649,7 @@
         $("#delete").click($.proxy(function(){
             var bformer = this;
             loading(true);
-            pcapi.deleteItem("editors", escape($("#form_title").text()), function(result, data){
+            pcapi.deleteItem("editors", escape(name), function(result, data){
                 if(result){
                     giveFeedback("Your form has been deleted");
                     bformer.initEditors();
@@ -706,7 +707,7 @@
         }, this));
     }
   
-    BuildFormer.prototype.prepareCode = function(){
+    BuildFormer.prototype.prepareCode = function(title){
         var code = "";
         var rand_number = Math.floor(Math.random()*1100);
         var name = $("#form_title").text();
@@ -724,9 +725,14 @@
             code = code.replace('readonly="readonly"', '');
         }
         code = code.replace('"', '\"');
+
+        //get rid of eo.json link
+        code = $("<div/>").append($(code));
+        code.find("#fieldcontain-dtree").remove();
+
         var text_code = new Array();
-        text_code.push('<form id=\"form'+rand_number+'\" data-ajax=\"false\" novalidate>\n')
-        text_code.push(code);
+        text_code.push('<form id=\"form'+rand_number+'\" title=\"'+title+'\" data-ajax=\"false\" novalidate>\n')
+        text_code.push(code.html());
         name = replaceSpace(simplify_name(name));
         text_code.push('\n<div id=\"'+name.toLowerCase()+'-buttons\" class=\"fieldcontain ui-grid-a\">');
         text_code.push('\n<div class=\"ui-block-a\">');

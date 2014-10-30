@@ -62,9 +62,12 @@
 
       //if ("oauth_token" in params && params["oauth_token"] !== undefined) {
       //  initialize_app(params["oauth_token"], localStorage.getItem("provider"), params);
-      //}else if ("group" in params && params["group"] !== undefined) {
-        initialize_app('d6d0177e-0f8e-75d1-6052-2ab59d96a6cd', localStorage.getItem("provider"), params);
-      //}
+      //}else
+      var group = 'd6d0177e-0f8e-75d1-6052-2ab59d96a6cd';
+      if ("group" in params && params["group"] !== undefined) {
+        console.log(params["uid"])
+        initialize_app(params["uid"], localStorage.getItem("provider"), params);
+      }
       //else{
         loadHomePage();
       //}
