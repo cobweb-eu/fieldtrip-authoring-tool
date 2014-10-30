@@ -73,9 +73,8 @@
         
         pcapi.init({
             "url": config.baseurl,
-            "version": config.versions
+            "version": config.version
         });
-        console.log(_config)
         pcapi.setProvider(_config.provider);
         pcapi.setCloudLogin(_config.oauth);
         
@@ -153,7 +152,7 @@
     
         this.enableHomeEvent();
         this.enableCreateFormEvent();
-        this.enableMapViewer();
+        //this.enableMapViewer();
         this.importEvent();
         //this.enableImageViewer();
     }

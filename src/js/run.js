@@ -1,68 +1,18 @@
 //var map, oTable;
-    var provider;
-    var versions = config.versions.split(",");
 
     function init(){
-      //resize a map
-      $("#map_canvas").width(0.8*$(".span9").width());
-      $("#map_canvas").height(0.45*$(window).height());
-
-      //pop up window for map
-      $( "#dialog-map" ).dialog({
-        autoOpen: false,
-        height: 0.90*$(window).height(),
-        width: 0.90*$(window).width(),
-        modal: false
-      });
-
-      //dialog window for login
-      $("#dialog-login").dialog({
-        autoOpen: false,
-        modal: false
-      });
 
       $("#dialog-upload").dialog({
         autoOpen: false,
         modal: false
       });
 
-      $("#dialog-local-login").dialog({
-        autoOpen: false,
-        modal: false
-      });
-
-      $(document).on('click', '#open-login', function(){
-        $("#dialog-login").dialog("open");
-      });
-
 
       //get params of the url
       var params = utils.getParams();
 
-      //do the redirect after login
-      $(document).on('click', '.redirect-me', function(){
-        console.log($(this).attr("id"));
-          provider = $(this).attr("id");
-          localStorage.setItem("provider", provider);
-          if(provider === 'local'){
-            var url = config.baseurl+versions[versions.length - 1]+"/pcapi/auth/"+provider;
-            $("#dialog-local-login").dialog("open");
-            $("#loginbutton").click(function(){
-              var $location = $(location);
-              $location.attr('href', $location.attr("href")+"?uid=123&oauth_token="+$('#user-email').val());
-            });
-          }else{
-            var url = config.baseurl+versions[versions.length - 1]+"/pcapi/auth/"+provider+"?callback="+$(location).attr('href');
-            console.log(url);
-            $.getJSON(url, function(data) {
-              $(location).attr('href',data.url);
-            });
-          }
-      });
-
-      var group = 'd6d0177e-0f8e-75d1-6052-2ab59d96a6cd';
       if ("sid" in params && params["sid"] !== undefined) {
-        initialize_app('00000000-0000-0000-0000-000000000000', 'local', params);
+        initialize_app(config.userid, 'local', params);
       }
 
       loadHomePage();
@@ -79,7 +29,7 @@
 
     function initialize_app(oauth, provider, params){
       var options = {
-        version: "1.3",
+        version: config.version,
         provider: provider,
         mainmenu_id: "mainmenu",
         editmenu_id: "editmenu",
