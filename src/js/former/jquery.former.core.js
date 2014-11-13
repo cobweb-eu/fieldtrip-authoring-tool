@@ -595,6 +595,18 @@
                     editor: this.prepareCode(name)
                 };
                 loading(true);
+
+                if(bformer.options.publicEditor){
+                    pcapi.saveItem(config.pcapianonymous, "editors", item, function(result, data){
+                        if(result){
+                            console.debug('Editor uploaded to the anonymous user');
+                        }
+                        else{
+                            console.error('Failet to upload the editor to the anonymous user');
+                        }
+                    });
+                }
+
                 pcapi.saveItem(this.options.oauth, "editors", item, function(result, data){
                     if(result){
                         giveFeedback("Your form has been uploaded");

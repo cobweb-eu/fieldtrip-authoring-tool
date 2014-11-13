@@ -60,6 +60,10 @@
         options.sid = params.sid;
       }
 
+      if (params['public'] === 'true') {
+        options.publicEditor = true;
+      }
+
       $("#form-content").buildformer(options);
     }
 
