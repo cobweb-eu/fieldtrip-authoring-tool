@@ -554,6 +554,7 @@
             }
           }
         });
+        var title = $("#form_title").text();
         var name = this.options.sid || $("#form_title").text();
 
         $("#save").click($.proxy(function(){
@@ -565,7 +566,7 @@
                     remoteDir: "editors",
                     item: {
                         name: encodeURIComponent(name),
-                        editor: this.prepareCode(name)
+                        editor: this.prepareCode(title)
                     }
                 };
                 loading(true);
@@ -592,7 +593,7 @@
 
                 var item = {
                     name: encodeURIComponent(name),
-                    editor: this.prepareCode(name)
+                    editor: this.prepareCode(title)
                 };
                 loading(true);
 
