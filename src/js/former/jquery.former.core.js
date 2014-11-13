@@ -554,7 +554,7 @@
             }
           }
         });
-        var name = $("#form_title").text();
+        var name = this.options.sid || $("#form_title").text();
 
         $("#save").click($.proxy(function(){
             var bformer = this;

@@ -53,8 +53,13 @@
       };
 
       if ("survey" in params) {
-        options["editor"] = params["survey"];
+        options.editor = params.survey;
       }
+
+      if ("sid" in params) {
+        options.sid = params.sid;
+      }
+
       $("#form-content").buildformer(options);
     }
 
