@@ -53,7 +53,7 @@
       };
 
       if ("survey" in params) {
-        options.editor = params.survey;
+        options.editor = decodeURIComponent(params.survey);
       }
 
       if ("sid" in params) {
