@@ -707,7 +707,7 @@
         code.find("#fieldcontain-dtree").remove();
 
         var text_code = new Array();
-        text_code.push('<form id=\"form'+rand_number+'\" title=\"'+title+'\" data-ajax=\"false\" novalidate>\n')
+        text_code.push('<form id=\"form'+rand_number+'\" data-title=\"'+title+'\" data-ajax=\"false\" novalidate>\n')
         text_code.push(code.html());
         name = replaceSpace(simplify_name(name));
         text_code.push('\n<div id=\"'+name.toLowerCase()+'-buttons\" class=\"fieldcontain ui-grid-a\">');
