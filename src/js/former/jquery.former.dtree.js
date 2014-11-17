@@ -5,7 +5,7 @@ var DTreeImplementation = function(target){
 DTreeImplementation.prototype.implement = function(){
     if($("#"+this.target).find("#fieldcontain-dtree").length===0){
         $("#dialog-upload").dialog("open");
-    
+
         var file;
         $('#fileselect').unbind();
         // Set an event listener on the Choose File field.
@@ -14,17 +14,27 @@ DTreeImplementation.prototype.implement = function(){
             // Our file var now holds the selected file
             file = files[0];
         });
-        
+
         $("#upload-button").unbind('click');
         $("#upload-button").click($.proxy(function(){
-            if($("#form_title").text() === file.name.split(".")[0]){
+                // TODO: When we migrate to modules get the sid & publicEditor from core
+                var dtreeFname = utils.getParams().sid + '.json';
+                var publicEditor = utils.getParams().public === 'true';
                 var options = {
                     "remoteDir": "editors",
-                    "filename": file.name,
+                    "filename": dtreeFname,
                     "file": file
                 };
                 loading(true);
                 var target = this.target;
+
+                if(publicEditor){
+                    var pubOptions = $.extend({}, options, {userid: config.pcapianonymous});
+                    pcapi.uploadFile(pubOptions, function(result, data){
+                        console.debug(result);
+                    });
+                }
+
                 pcapi.uploadFile(options, $.proxy(function(result, data){
                     if(result){
                         $("#dialog-upload").dialog("close");
@@ -37,7 +47,8 @@ DTreeImplementation.prototype.implement = function(){
                                     "i": 1,
                                     "type": "dtree",
                                     "title": file.name,
-                                    "url": pcapi.buildFSUrl('editors', file.name)
+                                    "dtree": 'editors/' + dtreeFname,
+                                    "url": pcapi.buildFSUrl('editors', dtreeFname)
                                 };
                                 var template = _.template(tmpl);
                                 $("#"+target).append(template(data));
@@ -49,10 +60,6 @@ DTreeImplementation.prototype.implement = function(){
                     }
                     loading(false);
                 }, this));
-            }
-            else{
-                giveFeedback("The name of the file should be the same as the editor's");
-            }
         }, this));
     }
     else{
