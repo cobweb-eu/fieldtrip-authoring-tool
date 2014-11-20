@@ -521,12 +521,14 @@
         }
         select.push("</ul>");
         select.push('</li>');
-        select.push('<li id="actions" class="dropdown">');
-        select.push('<a href="javascript:void(0)" id="save-actions" role="button" class="dropdown-toggle" data-toggle="dropdown">Actions <b class="caret"></b></a>');
-        select.push('<ul class="dropdown-menu" role="menu" aria-labelledby="sizes" id="save-actions-list">');
-        select.push('<li><a href="javascript:void(0)" id="save" class="btn">Update</a></li>');
-        select.push('<li><a href="javascript:void(0)" id="delete" class="btn" role="button">Delete</a></li>');
-        select.push('<li><a href="javascript:void(0)" id="synch" class="btn" role="button">Save</a></li>');
+        select.push('<li><a href="javascript:void(0)" id="synch" role="button">Save</a></li>');
+
+        // select.push('<li id="actions" class="dropdown">');
+        // select.push('<a href="javascript:void(0)" id="save-actions" role="button" class="dropdown-toggle" data-toggle="dropdown">Actions <b class="caret"></b></a>');
+        //select.push('<ul class="dropdown-menu" role="menu" aria-labelledby="sizes" id="save-actions-list">');
+        //select.push('<li><a href="javascript:void(0)" id="save" class="btn">Update</a></li>');
+        //select.push('<li><a href="javascript:void(0)" id="delete" class="btn" role="button">Delete</a></li>');
+        //select.push('<li><a href="javascript:void(0)" id="synch" class="btn" role="button">Save</a></li>');
         return select;
     };
 
