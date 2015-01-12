@@ -13,14 +13,22 @@ LayersImplementation.prototype.implement = function(){
         // Our file var now holds the selected file
         file = files[0];
     });
-    
+
     $("#upload-button").unbind('click');
     $("#upload-button").click($.proxy(function(){
+        var publicEditor = utils.getParams().public === 'true';
         var options = {
             "remoteDir": "layers",
             "filename": file.name,
             "file": file
         };
+
+        if(publicEditor){
+            options.urlParams = {
+                'public': 'true'
+            };
+        }
+
         loading(true);
         var target = this.target;
         pcapi.uploadFile(options, $.proxy(function(result, data){

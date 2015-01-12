@@ -592,35 +592,32 @@
             if($("#form_title").text().length === 0){
                 this.showFormName();
             }else{
-
-                var item = {
-                    name: encodeURIComponent(name),
-                    editor: this.prepareCode(title)
-                };
-                loading(true);
+                var options = {
+                        item: {
+                            name: encodeURIComponent(name),
+                            editor: this.prepareCode(title)
+                        },
+                        remoteDir: "editors",
+                        userId: this.options.oauth,
+                    };
 
                 if(bformer.options.publicEditor){
-                    pcapi.saveItem(config.pcapianonymous, "editors", item, function(result, data){
-                        if(result){
-                            console.debug('Editor uploaded to the anonymous user');
-                        }
-                        else{
-                            console.error('Failet to upload the editor to the anonymous user');
-                        }
-                    });
+                    options.urlParams = {
+                        'public': 'true'
+                    };
                 }
 
-                pcapi.saveItem(this.options.oauth, "editors", item, function(result, data){
-                    if(result){
-                        giveFeedback("Your form has been uploaded");
-                        bformer.initEditors();
-                        bformer.updateSyncStatus(true);
-                    }
-                    else{
-                        giveFeedback(data.msg);
-                    }
-                    loading(false);
-                });
+                pcapi.saveItem(options, function(result, data){
+                        if(result){
+                            giveFeedback("Your form has been uploaded");
+                            bformer.initEditors();
+                            bformer.updateSyncStatus(true);
+                        }
+                        else{
+                            giveFeedback(data.msg);
+                        }
+                        loading(false);
+                    });
             }
         }, this));
 

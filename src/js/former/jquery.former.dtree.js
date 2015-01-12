@@ -25,14 +25,14 @@ DTreeImplementation.prototype.implement = function(){
                     "filename": dtreeFname,
                     "file": file
                 };
+
                 loading(true);
                 var target = this.target;
 
                 if(publicEditor){
-                    var pubOptions = $.extend({}, options, {userid: config.pcapianonymous});
-                    pcapi.uploadFile(pubOptions, function(result, data){
-                        console.debug(result);
-                    });
+                    options.urlParams = {
+                        'public': 'true'
+                    };
                 }
 
                 pcapi.uploadFile(options, $.proxy(function(result, data){
