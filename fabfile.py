@@ -141,7 +141,6 @@ def _set_server():
     env.releases_path = "%(domain_path)s/releases" % { 'domain_path':env.domain_path }
     env.app_local = "./%(app_name)s" % { 'app_name':env.app_local_name }
 
-@task
 def _setup():
     """Prepare server for deployment"""
     run("mkdir -p %(domain_path)s" % { 'domain_path':env.domain_path })

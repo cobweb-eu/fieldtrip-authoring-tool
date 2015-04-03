@@ -94,7 +94,6 @@
 
         //hide the edit elements initially
         //this.showEditElements("form", true);
-        $("#create-form").trigger('click');
 
         //add html for the edit menu
         editmenu_id.find('.container').append(this.createEditMenu().join(""));
@@ -401,56 +400,81 @@
     };
 
     BuildFormer.prototype.loadEditors = function(){
+        var userId = pcapi.getUserId();
+        if(this.options.publicEditor){
+            userId = config.pcapianonymous;
+        }
         var options = {
-            "remoteDir": "editors"
+            "remoteDir": "editors",
+            "userId": userId
         };
         var bformer = this;
-        pcapi.getItems(options, function(result, data){
-            if(result){
-                var form_links = new Array();
-                var by_editor = new Array();
-                var editors = data.metadata;
-                by_editor.push('<option value="" selected="selected">All</option>');
-                by_editor.push('<option value="text.edtr">text.edtr</option>');
-                by_editor.push('<option value="image.edtr">image.edtr</option>');
-                by_editor.push('<option value="audio.edtr">audio.edtr</option>');
-                if(editors != undefined){
-                    for(var i=0; i<editors.length; i++){
-                        var name = editors[i].replace(/\/editors\/\/?/g, '');
-                        if(name.indexOf(".edtr") > -1){
-                            form_links.push('<li><a tabindex="-1" href="javascript: void(0)" class="get-form" title="'+name+'">'+name+'</a></li>');
-                            by_editor.push('<option value="'+name+'">'+name+'</option>');
+        pcapi.getItems(options).then(function(data){
+            var form_links = new Array();
+            var by_editor = new Array();
+            var editors = data.metadata;
+            by_editor.push('<option value="" selected="selected">All</option>');
+            by_editor.push('<option value="text.edtr">text.edtr</option>');
+            by_editor.push('<option value="image.edtr">image.edtr</option>');
+            by_editor.push('<option value="audio.edtr">audio.edtr</option>');
+            var editorExists = false;
+            var sid = "";
+            var editorTitle = "";
+            if(editors != undefined){
+                for(var i=0; i<editors.length; i++){
+                    var name = editors[i].replace(/\/editors\/\/?/g, '');
+                    if(name.indexOf(".edtr") > -1){
+                        var nameNoExtension = name.split(".")[0];
+                        if(nameNoExtension === bformer.options.sid && editorExists !== true){
+                            editorExists = true;
+                            sid = name;
+                            if("names" in data){
+                                editorTitle = data.names[i];
+                            }
+                            else{
+                                editorTitle = name;
+                            }
                         }
+                        form_links.push('<li><a tabindex="-1" href="javascript: void(0)" class="get-form" title="'+name+'">'+name+'</a></li>');
+                        by_editor.push('<option value="'+name+'">'+name+'</option>');
                     }
                 }
-
-                $(".get-form").remove();
-                $("#deditors").after(form_links.join(""));
-                $("#by-editor").html(by_editor.join(""));
-                loading(false);
-
-                $(".get-form").click(function(){
-                    var title = this.title.split(".")[0];
-                    var options = {
-                        "remoteDir": "editors",
-                        "item": this.title
-                    };
-                    loading(true);
-                    pcapi.getItem(options, function(result, data){
-                        if(result){
-                            bformer.appendExistingEditor(data, true, title);
-                            bformer.enableActionButtons(false, false, false);
-                        }
-                        else{
-                            giveFeedback("The editor is not valid.");
-                        }
-                        loading(false);
-                    });
-                });
             }
-            else{
-                loading(false);
-                giveFeedback("There is a problem loading all the editors.");
+
+            $(".get-form").remove();
+            $("#deditors").after(form_links.join(""));
+            $("#by-editor").html(by_editor.join(""));
+            loading(false);
+
+            $(".get-form").click(function(){
+                var title = this.title.split(".")[0];
+                var options = {
+                    "remoteDir": "editors",
+                    "item": this.title
+                };
+                if(bformer.options.publicEditor){
+                    options.userId = config.pcapianonymous;
+                }
+                loading(true);
+                pcapi.getEditor(options).then(function(data){
+                    bformer.appendExistingEditor(data, true, title);
+                    bformer.enableActionButtons(false, false, false);
+                    loading(false);
+                });
+            });
+            if(editorExists){
+                var options = {
+                    "remoteDir": "editors",
+                    "item": sid
+                };
+                if(bformer.options.publicEditor){
+                    options.userId = config.pcapianonymous;
+                }
+                pcapi.getEditor(options).then(function(data){
+                    bformer.appendExistingEditor(data, true, editorTitle);
+                    bformer.enableActionButtons(false, false, false);
+                    loading(false);
+                });
             }
         });
     }
@@ -521,12 +545,12 @@
         }
         select.push("</ul>");
         select.push('</li>');
-        select.push('<li><a href="javascript:void(0)" id="synch" role="button">Save</a></li>');
+        //select.push('<li><a href="javascript:void(0)" id="synch" role="button">Save</a></li>');
 
         // select.push('<li id="actions" class="dropdown">');
         // select.push('<a href="javascript:void(0)" id="save-actions" role="button" class="dropdown-toggle" data-toggle="dropdown">Actions <b class="caret"></b></a>');
         //select.push('<ul class="dropdown-menu" role="menu" aria-labelledby="sizes" id="save-actions-list">');
-        //select.push('<li><a href="javascript:void(0)" id="save" class="btn">Update</a></li>');
+        select.push('<li><a href="javascript:void(0)" id="save" role="button">Save As</a></li>');
         //select.push('<li><a href="javascript:void(0)" id="delete" class="btn" role="button">Delete</a></li>');
         //select.push('<li><a href="javascript:void(0)" id="synch" class="btn" role="button">Save</a></li>');
         return select;
@@ -566,22 +590,20 @@
             }else{
                 var options = {
                     remoteDir: "editors",
-                    item: {
-                        name: encodeURIComponent(name),
-                        editor: this.prepareCode(title)
-                    }
+                    path: encodeURIComponent(name),
+                    data: this.prepareCode(title).join("")
                 };
+                if(bformer.options.publicEditor){
+                    options.urlParams = {
+                        'public': 'true'
+                    };
+                }
                 loading(true);
-                pcapi.updateItem(options, function(result, data){
-                    if(result){
-                        giveFeedback("Your form has been uploaded");
-                        bformer.initEditors();
-                        bformer.addEditButtons();
-                        bformer.updateSyncStatus(true);
-                    }
-                    else{
-                        giveFeedback("There was an error with your synchronization with server.");
-                    }
+                pcapi.updateItem(options).then(function(data){
+                    giveFeedback("Your form has been uploaded");
+                    bformer.initEditors();
+                    bformer.addEditButtons();
+                    bformer.updateSyncStatus(true);
                     loading(false);
                 });
             }
@@ -593,13 +615,11 @@
                 this.showFormName();
             }else{
                 var options = {
-                        item: {
-                            name: encodeURIComponent(name),
-                            editor: this.prepareCode(title)
-                        },
-                        remoteDir: "editors",
-                        userId: this.options.oauth,
-                    };
+                    remoteDir: "editors",
+                    path: encodeURIComponent(name),
+                    userId: this.options.oauth,
+                    data: this.prepareCode(title)
+                };
 
                 if(bformer.options.publicEditor){
                     options.urlParams = {
@@ -607,33 +627,27 @@
                     };
                 }
 
-                pcapi.saveItem(options, function(result, data){
-                        if(result){
-                            giveFeedback("Your form has been uploaded");
-                            bformer.initEditors();
-                            bformer.updateSyncStatus(true);
-                        }
-                        else{
-                            giveFeedback(data.msg);
-                        }
-                        loading(false);
-                    });
+                pcapi.saveItem(options).then(function(result){
+                    giveFeedback("Your form has been uploaded");
+                    bformer.initEditors();
+                    bformer.updateSyncStatus(true);
+                    loading(false);
+                });
             }
         }, this));
 
         $("#delete").click($.proxy(function(){
             var bformer = this;
             loading(true);
-            pcapi.deleteItem("editors", escape(name), function(result, data){
-                if(result){
-                    giveFeedback("Your form has been deleted");
-                    bformer.initEditors();
-                    bformer.clearAll();
-                    bformer.createMandatoryElement();
-                }
-                else{
-                    giveFeedback("There was an error with your synchronization with the provider.");
-                }
+            var options = {
+                "remoteDir": "editors",
+                "path": escape(name)
+            }
+            pcapi.deleteItem("editors", escape(name)).then(function(result){
+                giveFeedback("Your form has been deleted");
+                bformer.initEditors();
+                bformer.clearAll();
+                bformer.createMandatoryElement();
                 loading(false);
             });
         }, this));
@@ -706,7 +720,7 @@
         code.find("#fieldcontain-dtree").remove();
 
         var text_code = new Array();
-        text_code.push('<form id=\"form'+rand_number+'\" data-title=\"'+title+'\" data-ajax=\"false\" novalidate>\n')
+        text_code.push('<form id=\"form'+rand_number+'\" data-title=\"'+name+'\" data-ajax=\"false\" novalidate>\n')
         text_code.push(code.html());
         name = replaceSpace(simplify_name(name));
         text_code.push('\n<div id=\"'+name.toLowerCase()+'-buttons\" class=\"fieldcontain ui-grid-a\">');
