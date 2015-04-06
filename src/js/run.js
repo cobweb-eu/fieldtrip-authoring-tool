@@ -44,7 +44,7 @@
           "radioAction": ["radio", "Single Choice Selector"],
           "selectAction": ["select", "Drop down Selector"],
           "photoAction": ["image", "Image Capture"],
-          "photoPointAction": ["image", "Image with Point"],
+          "photoLOSAction": ["image", "LOS Image"],
           "audioAction": ["audio", "Audio Capture"],
           "warningAction": ["warning", "Warning Message"],
           "dtreeAction": ["dtree", "Decision Tree"],

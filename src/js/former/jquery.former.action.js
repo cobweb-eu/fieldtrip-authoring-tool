@@ -58,8 +58,8 @@
       var photoimplementation = new PhotoImplementation(target, "image", "Take", element, elements);
       photoimplementation.implement();
     },
-    photoPointAction : function(target, element, elements){
-      var photoimplementation = new PhotoPointImplementation(target, "image", "Take", element, elements);
+    photoLOSAction : function(target, element, elements){
+      var photoimplementation = new PhotoLOSImplementation(target, "image", "Take", element, elements);
       photoimplementation.implement();
     },
     audioAction : function(target, element, elements){
