@@ -48,7 +48,8 @@
           "audioAction": ["audio", "Audio Capture"],
           "warningAction": ["warning", "Warning Message"],
           "dtreeAction": ["dtree", "Decision Tree"],
-          "layersAction": ["layers", "Layers"]
+          "layersAction": ["layers", "Layers"],
+          "geometryTypeAction": ["geometryType", "Geometry Type"]
         }
       };
 

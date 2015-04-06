@@ -81,5 +81,9 @@
     layersAction: function(target, element, elements){
       var layersImplementation = new LayersImplementation(target);
       layersImplementation.implement();
+    },
+    geometryTypeAction: function(target, element, elements){
+      GeometryTypeImplementation.init(target);
+      //geometryTypeImplementation.init(target);
     }
   }

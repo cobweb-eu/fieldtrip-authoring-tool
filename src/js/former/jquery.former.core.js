@@ -718,6 +718,7 @@
         //get rid of eo.json link
         code = $("<div/>").append($(code));
         code.find("#fieldcontain-dtree").remove();
+        code.find("#fieldcontain-geometryType").remove();
 
         var text_code = new Array();
         text_code.push('<form id=\"form'+rand_number+'\" data-title=\"'+name+'\" data-ajax=\"false\" novalidate>\n')
