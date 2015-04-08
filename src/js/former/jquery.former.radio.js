@@ -44,7 +44,7 @@ var RadioGroup = function(title, i, names, required){
 
 RadioGroup.prototype.render = function(){
   var group = new Array();
-  group.push('\n<div class="fieldcontain" id="fieldcontain-radio-'+this.i+'" data-cobweb-type="radio">');
+  group.push('\n<div class="fieldcontain" id="fieldcontain-radio-'+this.i+'" data-fieldtrip-type="radio">');
   group.push('\n<fieldset data-role="controlgroup">');
   group.push('\n<legend>'+this.title+'</legend>');
   for(name in this.names){

@@ -8,8 +8,8 @@ var PhotoLOSImplementation = function(target, title, label, type, elements){
 
 PhotoLOSImplementation.prototype.implement = function(){
   if($("#"+this.target).find(".camera").length===0){
-    var i = findIForFieldcontain("#"+this.target, '.fieldcontain', 'image');
-    var capture = new Capture(this.title, this.label, i, 'image/png', 'required', 'camera-los');
+    var i = findIForFieldcontain("#"+this.target, '.fieldcontain', 'camera-va');
+    var capture = new Capture(this.title, this.label, i, 'image/png', 'required', 'camera-va');
     $("#"+this.target).append(capture.render().join(""));
     appendEditButtons("fieldcontain-image-"+i);
     

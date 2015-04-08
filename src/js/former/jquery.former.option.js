@@ -41,7 +41,7 @@ var OptionsGroup = function(title, n, names, required){
 
 OptionsGroup.prototype.render = function(){
   var group = new Array();
-  group.push('\n<div class="fieldcontain" id="fieldcontain-select-'+this.n+'" data-cobweb-type="option">');
+  group.push('\n<div class="fieldcontain" id="fieldcontain-select-'+this.n+'" data-fieldtrip-type="option">');
   //group.push('\n<div id="select-'+this.n+'">');
   group.push('\n<fieldset>');
   group.push('\n<legend>'+this.title+'</legend>');

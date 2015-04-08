@@ -24,7 +24,7 @@ var Warning = function(name, required, placeholder){
 
 Warning.prototype.render = function(i){
   var text = new Array();
-  text.push('\n<div class="fieldcontain" id="fieldcontain-warning-'+i+'" data-cobweb-type="warning" style="height: auto;">');
+  text.push('\n<div class="fieldcontain" id="fieldcontain-warning-'+i+'" data-fieldtrip-type="warning" style="height: auto;">');
   text.push('\n<label for="form-warning-'+i+'">'+this.name+'</label>');
   text.push('\n<textarea name="form-warning-'+i+'" id="form-warning-'+i+'" placeholder="'+this.placeholder+'" '+this.required+' readonly="true"></textarea>');
   text.push("\n</div>\n");
