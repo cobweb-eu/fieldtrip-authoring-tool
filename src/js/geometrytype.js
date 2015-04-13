@@ -27,7 +27,7 @@ var GeometryTypeImplementation = (function(){
     var init = function(element){
         if($("#fieldcontain-geometryType").length === 0){
             $.ajax({
-                url: "../templates/modal.html",
+                url: "templates/modal.html",
                 dataType: "html"
             }).done(function(data){
                 var modalTemplate = _.template(data);
