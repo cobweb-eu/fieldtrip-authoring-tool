@@ -81,7 +81,7 @@
 </head>
 
 <body>
-    <div class="navbar navbar-inverse navbar-fixed-top">
+    <div class="navbar navbar-inverse navbar-fixed-top header">
       <div class="navbar-inner">
         <div class="container-fluid">
           <button type="button" class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
@@ -89,13 +89,14 @@
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
           </button>
-          <a class="brand" href="#">COBWEB Author</a>
+          <img src="https://dyfi.cobwebproject.eu/geonetwork/catalog/views/cobweb/images/tree.png" class="pull-left" style="height:40px">
+          <a class="brand white" href="#">Survey Designer</a>
           <div class="nav-collapse collapse">
             <ul class="nav" id="mainmenu"></ul>
-            <p class="navbar-text pull-right" style="display: none;" id="user-section">
+            <!--<p class="navbar-text pull-right" style="display: none;" id="user-section">
               Logged in as <span class="username"></span>
               <a href="/authoring/" class="btn btn-primary btn-small">Logout</a>
-            </p>
+            </p>-->
           </div><!--/.nav-collapse -->
         </div>
       </div>
@@ -142,26 +143,6 @@
                 <button id="export-records" class="btn disabled">Export</button>
               </div>
             </fieldset>
-            <fieldset>
-              <legend>Download app from:</legend>
-               <ul class="nav nav-list">
-                <li>
-                  <a href="#" target="blank" class="img-logo"><img src="img/android.png" width="50px" height="50px"></a>
-                  <a href="#" class="img-logo"><img src="img/apple.png" width="50px" height="50px"></a>
-                </li>
-              </ul>
-               <p>
-                The release of the COBWEB Mobile App for biological monitoring is scheduled for January 2015
-               </p>
-            </fieldset>
-            <!--<fieldset>
-              <legend>Cloud providers:</legend>
-               <ul class="nav nav-list">
-                <li>
-                  <img src="img/dropbox.png">
-                </li>
-              </ul>
-            </fieldset>-->
           </div><!--/.well -->
         </div><!--/span-->
         <div class="span9">
@@ -169,7 +150,7 @@
             <div class="navbar">
               <div class="navbar-inner" id="editmenu" style="display: none;">
                 <div class="container">
-                  <a class="brand" href="#">Edit menu</a>
+                  <a class="brand white" href="#">Edit menu</a>
                 </div>
               </div>
             </div>
@@ -221,18 +202,23 @@
 
       <hr>
 
-      <footer>
-        <p>
-          <a href="#" target="blank"><img src="img/eu.jpg"></a>
-          This project has received funding from the European Union’s Seventh Programme for research, technological development and demonstration under grant agreement No 308513.
-        </p>
+      <footer class="footer">
+        <div class="container">
+          Powered by <a target="_blank" href="https://github.com/edina/fieldtrip-open">Fieltrip Open</a>
+          <div class="pull-right">
+            <a target="_blank" href="https://dyfi.cobwebproject.eu/geonetwork/catalog/views/cobweb/COBWEB-EULA.pdf">EULA</a> -
+            <a target="_blank" href="https://dyfi.cobwebproject.eu/geonetwork/catalog/views/cobweb/COBWEB-PrivacyPolicy.pdf">Privacy Policy</a> -
+            <a target="_blank" href="https://dyfi.cobwebproject.eu/geonetwork/catalog/views/cobweb/COBWEB-CookiePolicy.pdf">Cookie Policy</a> -
+            <a target="_blank" href="https://dyfi.cobwebproject.eu/geonetwork/catalog/views/cobweb/COBWEB-TakeDownPolicy.pdf">Take Down Policy</a>
+          </div>
+        </div>
       </footer>
 
     </div><!--/.fluid-container-->
 
     <div id="dialog-map" title="Map Viewer"></div>
     
-    <div id="dialog-login" title="Login">
+    <div id="dialog-login" class="dialog-login" title="Login">
       <p>
         <ul>
           <li><a href="javascript:void(0);" class="redirect-me" id="dropbox"><img src="img/dropbox.png" alt="Dropbox" /></a></li>
@@ -251,7 +237,7 @@
       </form>
     </div>
 
-    <div id="dialog-local-login" title="Loging to Local Provider">
+    <div id="dialog-local-login" class="dialog-login" title="Loging to Local Provider">
       <fieldset>
         <input type="email" id="user-email">
         <button id="loginbutton" type="button" class="btn">Login</button>

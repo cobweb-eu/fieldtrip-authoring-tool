@@ -21,12 +21,12 @@ body {
   overflow: auto;
 }
 
-.hero-unit{
+/*.hero-unit{
   background-image: url("images/home-background.png");
   background-repeat: no-repeat;
   background-position: right bottom;
   min-height: 550px;
-}
+}*/
 
 .element{
   float: left;
@@ -211,4 +211,17 @@ hr.style-one {
 
 #form-content{
   overflow-y:scroll;
+}
+
+.dialog-login{
+  display: none;
+}
+
+.footer{
+  height: 30px;
+  background-color: #639E42;
+}
+
+.navbar-inner{
+  background: #639E42 !important;
 }

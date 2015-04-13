@@ -114,24 +114,24 @@
 
     BuildFormer.prototype.createMainMenu = function(){
         var menu = new Array();
-        menu.push('<li><a href="javascript:void(0)" id="home" class="menu-item">Home</a></li>');
-        menu.push('<li class="active"><a href="javascript:void(0)" rel="tooltip" data-placement="bottom" data-original-title="Click here to create new form" id="create-form" class="menu-item">Create new form</a></li>');
+        menu.push('<li><a href="javascript:void(0)" id="home" class="menu-item"></a></li>');
+        menu.push('<li><a href="javascript:void(0)" rel="tooltip" data-placement="bottom" data-original-title="Click here to create new form" id="create-form" class="menu-item"></a></li>');
         //menu.push('<li class="active"><a href="javascript:void(0)" rel="tooltip" data-placement="bottom" data-original-title="Click here to see your records" id="my-records" class="menu-item">Record Viewer</a></li>');
-        menu.push('<li class="dropdown">');
-        menu.push('<a href="javascript:void(0)" id="example-editors" rel="tooltip" data-placement="bottom" data-original-title="Click here to download some example forms" class="dropdown-toggle" data -toggle="dropdown">Editors Gallery <b class="caret"></b></a>');
-        menu.push('<ul class="dropdown-menu" id="editors-gallery"></ul>');
-        menu.push('</li>');
-        menu.push('<li class="dropdown">');
-        menu.push('<a href="javascript:void(0)" class="dropdown-toggle" data-toggle="dropdown" rel="tooltip" data-placement="bottom" data-original-title="Click here to download your custom forms" id="my-editors">My Editors <b class="caret"></b></a>');
-        menu.push('<ul class="dropdown-menu" id="forms">');
-        menu.push('<li><a href="javascript:void(0)" id="import">Import</a></li>');
-        menu.push('<li class="divider"></li>');
-        menu.push('<li class="nav-header" id="deditors">Editors</li>');
+        //menu.push('<li class="dropdown">');
+        //menu.push('<a href="javascript:void(0)" id="example-editors" rel="tooltip" data-placement="bottom" data-original-title="Click here to download some example forms" class="dropdown-toggle" data -toggle="dropdown">Editors Gallery <b class="caret"></b></a>');
+        //menu.push('<ul class="dropdown-menu" id="editors-gallery"></ul>');
+        //menu.push('</li>');
+        //menu.push('<li class="dropdown">');
+        //menu.push('<a href="javascript:void(0)" class="dropdown-toggle" data-toggle="dropdown" rel="tooltip" data-placement="bottom" data-original-title="Click here to download your custom forms" id="my-editors">My Editors <b class="caret"></b></a>');
+        //menu.push('<ul class="dropdown-menu" id="forms">');
+        //menu.push('<li><a href="javascript:void(0)" id="import">Import</a></li>');
+        //menu.push('<li class="divider"></li>');
+        //menu.push('<li class="nav-header" id="deditors">Editors</li>');
         //menu.push('<li class="divider"></li>');
         //menu.push('<li class="nav-header" id="leditors">Locally saved Editors</li>');
         menu.push('</ul></li>');
         //menu.push('<li><a href="javascript:void(0)" id="layers" class="menu-item">Layers</a></li>');
-        menu.push('<li><a href="mailto:info@cobwebproject.eu" class="menu-item">Contact</a></li>');
+        //menu.push('<li><a href="mailto:info@cobwebproject.eu" class="menu-item">Contact</a></li>');
         return menu;
     }
 
@@ -145,8 +145,8 @@
     //the events relating to the buttons of the create main menu
     BuildFormer.prototype.enableMainMenuEvents = function(){
         $(".menu-item").click(function(){
-            $('#mainmenu .active').removeClass('active');
-            $(this).parent().addClass("active");
+            //$('#mainmenu .active').removeClass('active');
+            //$(this).parent().addClass("active");
         });
 
         this.enableHomeEvent();
@@ -531,14 +531,14 @@
     BuildFormer.prototype.createSelectMenu = function(){
         var select = new Array();
         select.push('<li id="fat-menu" class="dropdown">');
-        select.push('<a href="javascript:void(0)" id="rotation" role="button" class="dropdown-toggle" data-toggle="dropdown">Rotation <b class="caret"></b></a>');
+        select.push('<a href="javascript:void(0)" id="rotation" role="button" class="dropdown-toggle white" data-toggle="dropdown">Rotation <b class="caret"></b></a>');
         select.push('<ul class="dropdown-menu" role="menu" aria-labelledby="rotation">');
         select.push('<li><a tabindex="-1" href="javascript: void(0)" class="rotation" id="hor">Horizontally</a></li>');
         select.push('<li><a tabindex="-1" href="javascript: void(0)" class="rotation" id="ver">Vertically</a></li>');
         select.push('</ul>');
         select.push('</li>');
         select.push('<li id="size-screen" class="dropdown">');
-        select.push('<a href="javascript:void(0)" id="sizes-screen" role="button" class="dropdown-toggle" data-toggle="dropdown">Size screen <b class="caret"></b></a>');
+        select.push('<a href="javascript:void(0)" id="sizes-screen" role="button" class="dropdown-toggle white" data-toggle="dropdown">Size screen <b class="caret"></b></a>');
         select.push('<ul class="dropdown-menu" role="menu" aria-labelledby="sizes" id="select-sizes">');
         for(size in this.options.sizes){
             select.push("<li><a tabindex='-1' href='javascript: void(0)' title='"+this.options.sizes[size]+"' class='device-width'>"+this.options.sizes[size]+"</li>");
@@ -550,7 +550,7 @@
         // select.push('<li id="actions" class="dropdown">');
         // select.push('<a href="javascript:void(0)" id="save-actions" role="button" class="dropdown-toggle" data-toggle="dropdown">Actions <b class="caret"></b></a>');
         //select.push('<ul class="dropdown-menu" role="menu" aria-labelledby="sizes" id="save-actions-list">');
-        select.push('<li><a href="javascript:void(0)" id="save" role="button">Save As</a></li>');
+        select.push('<li><a href="javascript:void(0)" id="save"  class="white" role="button">Save As</a></li>');
         //select.push('<li><a href="javascript:void(0)" id="delete" class="btn" role="button">Delete</a></li>');
         //select.push('<li><a href="javascript:void(0)" id="synch" class="btn" role="button">Save</a></li>');
         return select;
@@ -657,7 +657,7 @@
     BuildFormer.prototype.createCodeMenu = function(){
         var code = new Array();
         code.push('<li class="dropdown">');
-        code.push('<a href="javascript:void(0)" role="button" class="dropdown-toggle" data-toggle="dropdown">Mode <b class="caret"></b></a>');
+        code.push('<a href="javascript:void(0)" role="button" class="dropdown-toggle white" data-toggle="dropdown">Mode <b class="caret"></b></a>');
         code.push('<ul class="dropdown-menu" role="menu">');
         code.push('<li><a href="javascript:void(0)" id="edit">Edit</a></li>');
         code.push('<li><a href="javascript:void(0)" id="preview">Preview</a></li>');
