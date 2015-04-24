@@ -27,7 +27,7 @@
     "snippet": "http://fieldtripgb.edina.ac.uk/authoring/js/jquery.snippet.min.js",
     "swipebox": "1.2.9",
     "underscore": "1.5.2",
-    "pcapi": "0.0.6"
+    "pcapi": "0.0.7"
   },
   "dependency_locations": {
     "snippet": [
