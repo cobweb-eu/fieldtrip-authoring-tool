@@ -717,7 +717,7 @@
 
         //get rid of eo.json link
         code = $("<div/>").append($(code));
-        code.find("#fieldcontain-dtree").remove();
+        code.find(".button-dtree > a").remove();
         code.find("#fieldcontain-geometryType").remove();
 
         var text_code = new Array();

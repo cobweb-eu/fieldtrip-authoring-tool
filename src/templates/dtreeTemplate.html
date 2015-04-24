@@ -1,8 +1,9 @@
-<div class="fieldcontain" id="fieldcontain-<%=type%>" data-cobweb-type="<%=type%>">
-  <label for="form-<%=type%>-<%=i%>"><%=title%></label>
-  <a href="<%=url%>" target="blank"><%=title%></a>
-</div>
-<div hidden>
-  <div id="dtree-form-class-name">annotate-dtree-form</div>
-  <input type="hidden" data-dtree="<%=dtree%>"></div>
+<div class="fieldcontain" id="fieldcontain-<%=type%>-<%=i%>" data-fieldtrip-type="<%=type%>">
+    <fieldset>
+        <label for="fieldcontain-<%=type%>-<%=i%>"><%=title%></label>
+        <div class="button-wrapper button-dtree">
+            <a href="<%=url%>" target="blank"><%=title%></a>
+        </div>
+        <input type="hidden" data-dtree="<%=dtree%>">
+    </fieldset>
 </div>
