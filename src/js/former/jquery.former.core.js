@@ -724,7 +724,7 @@
         text_code.push('<form id=\"form'+rand_number+'\" data-title=\"'+name+'\" data-ajax=\"false\" novalidate>\n')
         text_code.push(code.html());
         name = replaceSpace(simplify_name(name));
-        text_code.push('\n<div id=\"'+name.toLowerCase()+'-buttons\" class=\"fieldcontain ui-grid-a\">');
+        text_code.push('\n<div id=\"save-cancel-editor-buttons\" class=\"fieldcontain ui-grid-a\">');
         text_code.push('\n<div class=\"ui-block-a\">');
         text_code.push('\n<input type=\"submit\" name=\"record\" id=\"'+rand_number+'_record\" value=\"Save\">');
         text_code.push('\n</div>');
@@ -899,8 +899,9 @@
         $("#"+this.id).html(cleared_data);
         $("#"+this.id).find('input[type="text"]').attr("readonly", "readonly");
         $("#"+this.id).find('textarea').attr("readonly", "readonly");
-        title = replaceSpace(title);
-        $('#'+title.toLowerCase()+'-buttons').remove();
+
+        // Remove '#save-cancel-editor-buttons' and any legacy buttons
+        $('div[id$="-buttons"].fieldcontain').remove();
         this.addEditButtons();
     }
 
