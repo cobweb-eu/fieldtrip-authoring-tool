@@ -47,7 +47,7 @@ DTreeImplementation.prototype.implement = function(){
                             "i": 1,
                             "type": "dtree",
                             "title": file.name,
-                            "dtree": 'editors/' + dtreeFname,
+                            "dtree": dtreeFname,
                             "url": pcapi.buildFSUrl('editors', dtreeFname)
                         };
                         var template = _.template(tmpl);
