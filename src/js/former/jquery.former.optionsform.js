@@ -18,7 +18,7 @@ OptionsForm.prototype.enableEvents = {
         var $$ = window.frames[0].jQuery;
         $$(id).prev().text($(this).val());
       }
-      limitChars('text_title', 30, 'charlimitinfo1');
+      limitChars('text_title', 100, 'charlimitinfo1');
       changeStatus();
     });
     
@@ -70,7 +70,7 @@ OptionsForm.prototype.enableEvents = {
     var id = "#form-textarea-"+i;
     $("#textarea_title").keyup(function(event){
       $(id).prev().text($(this).val());
-      limitChars('textarea_title', 30, 'charlimitinfo1');
+      limitChars('textarea_title', 100, 'charlimitinfo1');
       if($("#iframe").dialog("isOpen")==true){
         var $$ = window.frames[0].jQuery;
         $$(id).prev().text($(this).val());
@@ -123,7 +123,7 @@ OptionsForm.prototype.enableEvents = {
     var ini = "#form-";
     $("#checkbox_title").keyup(function(event){
       $(id).find('legend').text($(this).val());
-      limitChars('checkbox_title', 30, 'charlimitinfo1');
+      limitChars('checkbox_title', 100, 'charlimitinfo1');
       if($("#iframe").dialog("isOpen")==true){
         var $$ = window.frames[0].jQuery;
         $$(id).find('legend').text($(this).val());
@@ -191,7 +191,7 @@ OptionsForm.prototype.enableEvents = {
     var ini = "#form-";
     $("#radio_title").keyup(function(event){
       $(id).find('legend').text($(this).val());
-      limitChars('radio_title', 30, 'charlimitinfo1');
+      limitChars('radio_title', 100, 'charlimitinfo1');
       if($("#iframe").dialog("isOpen")==true){
         var $$ = window.frames[0].jQuery;
         $$(id).find('.ui-controlgroup-label').text($(this).val());
@@ -258,7 +258,7 @@ OptionsForm.prototype.enableEvents = {
     var sel_id = "#form-select-"+i;
     $("#select_title").keyup(function(event){
       $(id).find('legend').text($(this).val());
-      limitChars('select_title', 30, 'charlimitinfo1');
+      limitChars('select_title', 100, 'charlimitinfo1');
       if($("#iframe").dialog("isOpen")==true){
         var $$ = window.frames[0].jQuery;
         $$(id).find('legend').text($(this).val());
