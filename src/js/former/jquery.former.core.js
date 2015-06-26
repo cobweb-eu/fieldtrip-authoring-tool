@@ -918,10 +918,12 @@
         var i = splits[2];
         var searcher = new Searcher(id, type, $);
         var results = searcher.search();
-        var optionsForm = new OptionsForm(type, results.title, results.placeholder, results.required, results.group, bformer.getElements(), results.value, i);
+        var persistent = $('#' + id).data('persistent') === 'on'? true: false;
+
+        var optionsForm = new OptionsForm(type, results.title, results.placeholder, results.required, results.group, bformer.getElements(), results.value, i, persistent);
 
         if(type === "range"){
-            makeAlertWindow(optionsForm.create(null, results.range[0], results.range[1], results.range[2]).join(""), 'Options', 260, 400, 'options-dialog', 1000, "right", makeDialogButtons('options-dialog', this.target));
+            makeAlertWindow(optionsForm.create(results.range[0], results.range[1], results.range[2]).join(""), 'Options', 260, 400, 'options-dialog', 1000, "right", makeDialogButtons('options-dialog', this.target));
         }else if(type === "text"){
             makeAlertWindow(optionsForm.create(results.maxlength).join(""), 'Options', 260, 400, 'options-dialog', 1000, "right", makeDialogButtons('options-dialog', this.target));
         }else{

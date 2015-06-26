@@ -1,4 +1,4 @@
-var OptionsForm = function(type, title, placeholder, required, group, elements, value, integ){
+var OptionsForm = function(type, title, placeholder, required, group, elements, value, integ, persistent){
   this.type = type;
   this.title =title;
   this.placeholder = placeholder;
@@ -7,7 +7,28 @@ var OptionsForm = function(type, title, placeholder, required, group, elements, 
   this.elements = elements;
   this.value = value;
   this.integ = integ;
+  this.persistent = persistent;
 }
+
+
+/**
+ * Handle the event to update the data-persist html attribute
+ * for the parent field
+ *
+ * @elementId form element
+ */
+OptionsForm.onChangePersistent = function(elementId) {
+  return function(event) {
+    var value = $(event.target).val();
+    var $field = $(elementId, '#form-content').closest('div.fieldcontain');
+    if (value === 'true') {
+      $field.attr('data-persistent', 'on');
+    }
+    else {
+      $field.attr('data-persistent', 'off');
+    }
+  }
+};
 
 OptionsForm.prototype.enableEvents = {
   text: function(i, target){
@@ -65,6 +86,7 @@ OptionsForm.prototype.enableEvents = {
         changeStatus();
       }
     });
+    $('select.persistent').on('change', OptionsForm.onChangePersistent(id));
   },
   textarea: function(i, target){
     var id = "#form-textarea-"+i;
@@ -91,6 +113,7 @@ OptionsForm.prototype.enableEvents = {
       ($(this).val() == "true") ? $(id).attr("required", true) : $(id).removeAttr("required");
       changeStatus();
     });
+    $('select.persistent').on('change', OptionsForm.onChangePersistent(id));
   },
   warning: function(i, target){
      var id = "#form-warning-"+i;
@@ -185,6 +208,8 @@ OptionsForm.prototype.enableEvents = {
       $(this).remove();
       changeStatus();
     });
+
+    $('select.persistent').on('change', OptionsForm.onChangePersistent(id));
   },
   radio: function(n, target){
     var id = "#fieldcontain-radio-"+n;
@@ -252,6 +277,7 @@ OptionsForm.prototype.enableEvents = {
       changeStatus();
     });
 
+    $('select.persistent').on('change', OptionsForm.onChangePersistent(id));
   },
   select: function(i, target){
     var id = "#fieldcontain-select-"+i;
@@ -322,6 +348,8 @@ OptionsForm.prototype.enableEvents = {
       }
       changeStatus();
     }
+
+    $('select.persistent').on('change', OptionsForm.onChangePersistent(id));
   },
   image: function(i){
     enableMedia("image", i)
@@ -359,6 +387,8 @@ OptionsForm.prototype.enableEvents = {
     $(".type").change(function(event){
       $(id).prop("type", $(this).val());
     });
+
+    $('select.persistent').on('change', OptionsForm.onChangePersistent(id));
   }
 }
 
@@ -386,11 +416,13 @@ function enableMedia(type, i){
   });
 }
 
-OptionsForm.prototype.create = function(maxlength, step, min, max){
+OptionsForm.prototype.create = function(){
   var form = new Array();
+  var args = Array.prototype.slice.call(arguments);
+
   for(var i=0; i<this.elements.length;i++){
     if(this.elements[i] === this.type){
-      form = this.render[this.type].apply(this, [maxlength, this.integ, step, min, max]);
+      form = this.render[this.type].apply(this, [this.integ].concat(args));
       //(this.title, this.placeholder, this.required, maxlength, step, min, max);
       break;
     }
@@ -399,18 +431,21 @@ OptionsForm.prototype.create = function(maxlength, step, min, max){
 }
 
 OptionsForm.prototype.render = {
-  text: function(maxlength, i, step, min, max){
+  text: function(i, maxlength){
     var form = this.createBasicForm();
     if(i == 1){
       form.push('<div class="element-name">Set Prefix</div><div class="element"><input type="text" name="text_prefix" id="text_prefix" value="'+this.value+'" /></div>');
     }
     form.push('<div class="element-name">Placeholder</div><div class="element"><input type="text" name="text_placeholder" id="text_placeholder" value="'+this.placeholder+'" /></div>');
     form.push('<div class="element-name">Max length</div><div class="element"><input type="number" name="text_maxlength" id="text_maxlength" value="'+maxlength+'" /></div>');
+    form.push(this.createPersistentOption());
+
     return form;
   },
   textarea: function(){
     var form = this.createBasicForm();
     form.push('<div class="element-name">Placeholder</div> <div class="element"><input type="text" name="textarea_placeholder" id="textarea_placeholder" value="'+this.placeholder+'" /></div>');
+    form.push(this.createPersistentOption());
     return form;
   },
   warning: function(){
@@ -420,6 +455,7 @@ OptionsForm.prototype.render = {
   },
   radio: function(){
     var form = this.createBasicForm();
+    form.push(this.createPersistentOption());
     form.push('<div class="element-name">Elements</div> <div class="accordion">');
     form.push('<div id="radios">'+this.renderGroup(this.type).join("")+'</div>');
     form.push('<button id="add_radio">Add radio</button>');
@@ -427,6 +463,7 @@ OptionsForm.prototype.render = {
   },
   checkbox: function(){
     var form = this.createBasicForm();
+    form.push(this.createPersistentOption());
     form.push('<div class="element-name">Elements</div> <div class="accordion">');
     form.push('<div id="checkboxes">'+this.renderGroup(this.type).join("")+'</div>');
     form.push('<button id="add_checkbox">Add checkbox</button>');
@@ -434,6 +471,7 @@ OptionsForm.prototype.render = {
   },
   select: function(){
     var form = this.createBasicForm();
+    form.push(this.createPersistentOption());
     form.push('<div class="element-name">Elements</div> <div class="accordion">');
     form.push('<div id="options">'+this.renderGroup(this.type).join("")+'</div>');
     form.push('<button id="add_option">Add option</button>');
@@ -442,10 +480,10 @@ OptionsForm.prototype.render = {
   image: function(){
     return this.createBasicForm();
   },
-  audio: function(g){
+  audio: function(){
     return this.createBasicForm();
   },
-  gps: function(title, hidden, required){
+  gps: function(i, title, hidden, required){
     var form = new Array();
     var yes = '', no = '', hidden_yes = '', hidden_no = '';
     if(required == "required"){
@@ -462,8 +500,9 @@ OptionsForm.prototype.render = {
     form.push("<div class='element-name'>Hidden</div> <div class='element'><select class='hid'><option value='true' "+hidden_yes+">Yes</option><option value='false' "+hidden_no+">No</option></select></div>");
     return form;
   },
-  range: function(maxlength, i, step, min, max){
+  range: function(i, step, min, max){
     var form = this.createBasicForm();
+    form.push(this.createPersistentOption());
     form.push("<div class='element-name'>Step</div><div class='element'><input type='number' name='text_step' id='text_step' value='"+step+"' /></div>");
     form.push("<div class='element-name'>Min value</div><div class='element'><input type='number' name='text_min' id='text_min' value='"+min+"' /></div>");
     form.push("<div class='element-name'>Max value</div><div class='element'><input type='number' name='text_max' id='text_max' value='"+max+"' /></div>");
@@ -471,6 +510,22 @@ OptionsForm.prototype.render = {
     return form;
   }
 }
+
+/**
+ *  Create the markup for the persistent option
+ *  @return a string with the html to render the persistent option
+ */
+OptionsForm.prototype.createPersistentOption = function() {
+    return (
+      '<div class="element-name">Persistent</div>' +
+      '<div class="element">' +
+        '<select class="persistent">' +
+          '<option value="true" ' + (this.persistent === true? 'selected':'') + '>Yes</option>' +
+          '<option value="false" ' + (this.persistent !== true? 'selected':'') + '>No</option>' +
+        '</select>' +
+      '</div>'
+    );
+};
 
 OptionsForm.prototype.createBasicForm = function(){
   var form = new Array();
