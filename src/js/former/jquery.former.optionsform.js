@@ -21,7 +21,7 @@ OptionsForm.prototype.enableEvents = {
       limitChars('text_title', 100, 'charlimitinfo1');
       changeStatus();
     });
-    
+
     if(i == 1){
       $("#text_prefix").keyup(function(event){
         $(id).attr("value", $(this).val());
@@ -32,7 +32,7 @@ OptionsForm.prototype.enableEvents = {
         changeStatus();
     });
     }
-    
+
     $("#text_placeholder").keyup(function(event){
       $(id).attr("placeholder", $(this).val());
       if($("#iframe").dialog("isOpen") == true){
@@ -41,7 +41,7 @@ OptionsForm.prototype.enableEvents = {
       }
       changeStatus();
     });
-    
+
     $(".required").change(function(event){
       if(i == 1){
         $(this).val("true");
@@ -51,12 +51,12 @@ OptionsForm.prototype.enableEvents = {
         changeStatus();
       }
     });
-    
+
     $(".type").change(function(event){
       $(id).prop("type", $(this).val());
       changeStatus();
     });
-    
+
     $("#text_maxlength").change(function(event){
       if(parseInt($(this).val()) <= 0){
         giveFeedback("The maxlenght has to be a positive integer.")
@@ -77,7 +77,7 @@ OptionsForm.prototype.enableEvents = {
       }
       changeStatus();
     });
-    
+
     $("#textarea_placeholder").keyup(function(event){
       $(id).attr("placeholder", $(this).val());
       if($("#iframe").dialog("isOpen")==true){
@@ -86,7 +86,7 @@ OptionsForm.prototype.enableEvents = {
       }
       changeStatus();
     });
-    
+
     $(".required").change(function(event){
       ($(this).val() == "true") ? $(id).attr("required", true) : $(id).removeAttr("required");
       changeStatus();
@@ -103,7 +103,7 @@ OptionsForm.prototype.enableEvents = {
       }
       changeStatus();
     });
-    
+
     $("#warning_placeholder").keyup(function(event){
       $(id).attr("placeholder", $(this).val());
       if($("#iframe").dialog("isOpen")==true){
@@ -112,7 +112,7 @@ OptionsForm.prototype.enableEvents = {
       }
       changeStatus();
     });
-    
+
     $(".required").change(function(event){
       ($(this).val() == "true") ? $(id).attr("required", true) : $(id).removeAttr("required");
       changeStatus();
@@ -130,7 +130,7 @@ OptionsForm.prototype.enableEvents = {
       }
       changeStatus();
     });
-  
+
     $(document).on('keyup', '#checkboxes input', function(event){
       var el_id = ini+$(this).attr("id");
       $(id).find(el_id).prev().text($(this).val());
@@ -143,7 +143,7 @@ OptionsForm.prototype.enableEvents = {
       }
       changeStatus();
     });
-    
+
     $(".required").change(function(){
       var finds = $(id).find("input:checkbox");
       for(var i=0; i<finds.length;i++){
@@ -151,7 +151,7 @@ OptionsForm.prototype.enableEvents = {
       }
       changeStatus();
     });
-  
+
     $("#add_checkbox").click(function(){
       var i = findHighestElement(target, "input:checkbox", "form-checkbox-");
       i++;
@@ -168,19 +168,19 @@ OptionsForm.prototype.enableEvents = {
       }
       changeStatus();
     });
-    
+
     $(document).off('click', '.delete-checkbox')
     $(document).on('click', '.delete-checkbox', function(){
       var form_id = ini+$(this).prev().attr("id");
       $(id).find(form_id).prev().remove();
       $(id).find(form_id).remove();
-      
+
       if($("#iframe").dialog("isOpen")==true){
         var $$ = window.frames[0].jQuery;
         $$(id).find(form_id).prev().remove();
         $$(id).find(form_id).remove();
       }
-        
+
       $(this).prev().remove();
       $(this).remove();
       changeStatus();
@@ -198,7 +198,7 @@ OptionsForm.prototype.enableEvents = {
       }
       changeStatus();
     });
-  
+
     $(document).on('keyup', '#radios input', function(event){
       var el_id = ini+$(this).attr("id");
       $(id).find(el_id).prev().text($(this).val());
@@ -211,7 +211,7 @@ OptionsForm.prototype.enableEvents = {
       }
       changeStatus();
     });
-    
+
     $(".required").change(function(){
       var finds = $(id).find("input:radio");
       for(var i=0; i<finds.length;i++){
@@ -219,7 +219,7 @@ OptionsForm.prototype.enableEvents = {
       }
       changeStatus();
     });
-  
+
     $("#add_radio").click(function(){
       var j = id.split("-")[2];
       var i = findHighestElement(target, "input:radio", "form-radio"+j+"-")+1;
@@ -235,13 +235,13 @@ OptionsForm.prototype.enableEvents = {
       }
       changeStatus();
     });
-    
+
     $(document).off('click', '.delete-radio');
     $(document).on('click', '.delete-radio', function(){
       var form_id = ini+$(this).prev().attr("id");
       $(id).find(form_id).prev().remove();
       $(id).find(form_id).remove();
-      
+
       if($("#iframe").dialog("isOpen")==true){
         var $$ = window.frames[0].jQuery;
         $$(id).find(form_id).prev().remove();
@@ -251,7 +251,7 @@ OptionsForm.prototype.enableEvents = {
       $(this).remove();
       changeStatus();
     });
-    
+
   },
   select: function(i, target){
     var id = "#fieldcontain-select-"+i;
@@ -265,24 +265,24 @@ OptionsForm.prototype.enableEvents = {
       }
       changeStatus();
     });
-    
+
     $(document).off('keyup', '#options input');
     $(document).on('keyup', '#options input', function(event){
       fixOptions(sel_id);
     });
-    
+
     $(".required").change(function(){
       ($(this).val() == "true") ? $(sel_id).attr("required", true) : $(sel_id).removeAttr("required");
       fixOptions(sel_id);
     });
-    
+
     $("#add_option").click(function(){
       var option_i = 0;
       if($("#options").find("input").length > 0){
         option_i = $("#options").find("input")[$("#options").find("input").length-1].id.split("option-")[1];
       }
       option_i++;
-      
+
       var option = new Option("Select", option_i, i, "");
       $("#options").append(option.createOptionsFormOption());
       $(sel_id).append(option.createOption().join(""));
@@ -292,14 +292,14 @@ OptionsForm.prototype.enableEvents = {
       }
       changeStatus();
     });
-    
+
     $(document).off('click', '.delete-option');
     $(document).on('click', '.delete-option', function(){
       $(this).prev().remove();
       $(this).remove();
       fixOptions(sel_id);
     });
-    
+
     function fixOptions(sel_id){
       var options = $('.option');
       var new_options = new Array();
@@ -339,23 +339,23 @@ OptionsForm.prototype.enableEvents = {
       }
       changeStatus();
     });
-    
+
     $("#text_step").change(function(event){
       $(id).attr("step", $(this).val());
     });
-    
+
     $("#text_min").change(function(event){
       $(id).prop("min", $(this).val());
     });
-    
+
     $("#text_max").change(function(event){
       $(id).prop("max", $(this).val());
     });
-    
+
     $(".required").change(function(event){
       ($(this).val() == "true") ? $(id).attr("required", true) : $(id).removeAttr("required");
     });
-    
+
     $(".type").change(function(event){
       $(id).prop("type", $(this).val());
     });
@@ -379,13 +379,13 @@ function enableMedia(type, i){
     }
     changeStatus();
   });
-  
+
   $(".required").change(function(event){
     $(".required").val() === "true" ? $(id).attr("required", "required") : $(id).removeAttr("required");
     changeStatus();
   });
 }
-  
+
 OptionsForm.prototype.create = function(maxlength, step, min, max){
   var form = new Array();
   for(var i=0; i<this.elements.length;i++){
@@ -467,7 +467,7 @@ OptionsForm.prototype.render = {
     form.push("<div class='element-name'>Step</div><div class='element'><input type='number' name='text_step' id='text_step' value='"+step+"' /></div>");
     form.push("<div class='element-name'>Min value</div><div class='element'><input type='number' name='text_min' id='text_min' value='"+min+"' /></div>");
     form.push("<div class='element-name'>Max value</div><div class='element'><input type='number' name='text_max' id='text_max' value='"+max+"' /></div>");
-    
+
     return form;
   }
 }
