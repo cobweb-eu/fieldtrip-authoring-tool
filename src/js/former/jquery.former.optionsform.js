@@ -414,6 +414,15 @@ function enableMedia(type, i){
     $(".required").val() === "true" ? $(id).attr("required", "required") : $(id).removeAttr("required");
     changeStatus();
   });
+
+  $("#image_multiple").change(function(){
+    if($(this).is(':checked')){
+      $("#fieldcontain-image-1").attr("id", "fieldcontain-multiimage-1");
+    }
+    else{
+      $("#fieldcontain-multiimage-1").attr("id", "fieldcontain-image-1");
+    }
+  })
 }
 
 OptionsForm.prototype.create = function(){
@@ -478,7 +487,9 @@ OptionsForm.prototype.render = {
     return form;
   },
   image: function(){
-    return this.createBasicForm();
+    var form = this.createBasicForm();
+    form.push('<div class="element-name">Multiple images</div><div class="element"><input type="checkbox" name="image_multiple" id="image_multiple"></div>');
+    return form;
   },
   audio: function(){
     return this.createBasicForm();
