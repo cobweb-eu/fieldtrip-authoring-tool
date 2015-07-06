@@ -964,7 +964,7 @@
                 if(splits[1] === "text" && splits[2] === "1"){
                     this.appendEditButtons($(finds[i]).attr("id"));
                 }
-                else if($.inArray(splits[1], ["geometryType", "features", "dtree"]>-1)){
+                else if($.inArray(splits[1], ["geometryType", "features", "dtree"])> -1){
                     this.appendDeleteButtons($(finds[i]).attr("id"));
                 }else{
                     this.appendEditDeleteButtons($(finds[i]).attr("id"));
