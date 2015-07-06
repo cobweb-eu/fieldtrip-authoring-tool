@@ -7,10 +7,10 @@ var GeometryTypeImplementation = (function(){
     var prepareOptions = function(){
         var options = [];
         options.push('<div class="control-group">');
-        options.push('<label class="radio"><input type="radio" name="'+thisType+'" value="point">point</label>');
-        options.push('<label class="radio"><input type="radio" name="'+thisType+'" value="line">line</label>');
-        options.push('<label class="radio"><input type="radio" name="'+thisType+'" checked="checked" value="polygon">polygon</label>');
-        options.push('<label class="radio"><input type="radio" name="'+thisType+'" value="box">box</label>');
+        options.push('<label class="radio"><input type="checkbox" name="'+thisType+'" value="point">point</label>');
+        options.push('<label class="radio"><input type="checkbox" name="'+thisType+'" value="line">line</label>');
+        options.push('<label class="radio"><input type="checkbox" name="'+thisType+'" checked="checked" value="polygon">polygon</label>');
+        options.push('<label class="radio"><input type="checkbox" name="'+thisType+'" value="box">box</label>');
         options.push('</div>');
         return options;
     };
@@ -37,7 +37,11 @@ var GeometryTypeImplementation = (function(){
 
                 $modalGeometry.off("click", "button");
                 $modalGeometry.on("click", "button", function(){
-                    renderGeometry($('input[name='+thisType+']:checked', modalGeometry).val(), element);
+                    var values = [];
+                    $('input[name='+thisType+']:checked', modalGeometry).each(function(){
+                        values.push($(this).val());
+                    });
+                    renderGeometry(values.join(","), element);
                     $modalGeometry.modal('hide');
                 });
             });
