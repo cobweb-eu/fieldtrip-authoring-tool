@@ -40,10 +40,10 @@ LayersImplementation.prototype.implement = function(){
                 dataType: 'html',
                 success: function(tmpl){
                     var data = {
-                        "i": 1,
-                        "type": "dtree",
+                        "i": findIForFieldcontain("#"+target, '.fieldcontain', "features"),
+                        "type": "features",
                         "title": file.name,
-                        "url": pcapi.buildFSUrl('layers', file.name)
+                        "url": pcapi.buildFSUrl('features', file.name)
                     };
                     var template = _.template(tmpl);
                     $("#"+target).append(template(data));

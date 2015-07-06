@@ -717,8 +717,9 @@
 
         //get rid of eo.json link
         code = $("<div/>").append($(code));
-        code.find(".button-dtree > a").remove();
-        code.find("#fieldcontain-geometryType").remove();
+        code.find(".fieldcontain-dtree fieldset").remove();
+        code.find(".fieldcontain-features fieldset").remove();
+        code.find("#fieldcontain-geometryType span").remove();
 
         var text_code = new Array();
         text_code.push('<form id=\"form'+rand_number+'\" data-title=\"'+name+'\" data-ajax=\"false\" novalidate>\n')
@@ -896,9 +897,24 @@
         this.appendTitle(title, sync);
         title = simplify_name(title);
         var cleared_data = ndata.find('.fieldcontain');
-        $("#"+this.id).html(cleared_data);
-        $("#"+this.id).find('input[type="text"]').attr("readonly", "readonly");
-        $("#"+this.id).find('textarea').attr("readonly", "readonly");
+        var $id = $("#"+this.id);
+        $id.html(cleared_data);
+        $id.find('input[type="text"]').attr("readonly", "readonly");
+        $id.find('textarea').attr("readonly", "readonly");
+        $(".fieldcontain-features input[type=hidden]").each(function(){
+            var fileName = $(this).val();
+            $(this).after('<fieldset><label for="form-features">'+$(this).val()+'</label>'+
+                          '<a href="'+pcapi.buildFSUrl('features', fileName)+'" target="blank">'+fileName+'</a></fieldset>');
+        });
+        $(".fieldcontain-dtree input[type=hidden]").each(function(){
+            var fileName = $(this).val();
+            $(this).after('<fieldset><label for="form-dtree">'+$(this).val()+'</label>'+
+                          '<a href="'+pcapi.buildFSUrl('editors', fileName)+'" target="blank">'+fileName+'</a></fieldset>');
+        });
+        var gType = $("#fieldcontain-geometryType input[type=hidden]").val();
+        if(gType){
+            $("#fieldcontain-geometryType").append("<span>geometryType: "+gType+"</span>");
+        }
 
         // Remove '#save-cancel-editor-buttons' and any legacy buttons
         $('div[id$="-buttons"].fieldcontain').remove();
@@ -947,6 +963,9 @@
                 var splits = $(finds[i]).attr("id").split("-");
                 if(splits[1] === "text" && splits[2] === "1"){
                     this.appendEditButtons($(finds[i]).attr("id"));
+                }
+                else if($.inArray(splits[1], ["geometryType", "features", "dtree"]>-1)){
+                    this.appendDeleteButtons($(finds[i]).attr("id"));
                 }else{
                     this.appendEditDeleteButtons($(finds[i]).attr("id"));
                 }
@@ -970,6 +989,11 @@
     BuildFormer.prototype.appendEditDeleteButtons = function(id){
         $("#"+id).prepend( "<div class='handle'><span class='ui-icon ui-icon-carat-2-n-s'></span></div>" );
         $("#"+id).append('<div class="fieldButtons"><a class="btn edit-field" href="javascript:void( 0);"><i class="icon-pencil"></i></a><a class="btn delete-field" href="javascript:void( 0);"><i class="icon-remove-sign"></i></a></div>');
+    }
+
+    BuildFormer.prototype.appendDeleteButtons = function(id){
+        $("#"+id).prepend( "<div class='handle'><span class='ui-icon ui-icon-carat-2-n-s'></span></div>" );
+        $("#"+id).append('<div class="fieldButtons"><a class="btn delete-field" href="javascript:void( 0);"><i class="icon-remove-sign"></i></a></div>');
     }
 
     BuildFormer.prototype.removeEdits = function(){

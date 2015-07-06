@@ -44,7 +44,7 @@ DTreeImplementation.prototype.implement = function(){
                     dataType: 'html',
                     success: function(tmpl){
                         var data = {
-                            "i": 1,
+                            "i": findIForFieldcontain("#"+target, '.fieldcontain', "dtree"),
                             "type": "dtree",
                             "title": file.name,
                             "dtree": dtreeFname,
