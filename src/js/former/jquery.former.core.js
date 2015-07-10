@@ -396,7 +396,6 @@
             else{
                 giveFeedback("You need to refresh your page. The session with the provider has problems!");
             }
-            loading(false);
         });
     };
 
@@ -410,7 +409,6 @@
             "userId": userId
         };
         var bformer = this;
-        loading(true);
         pcapi.getItems(options).then(function(data){
             var form_links = new Array();
             var by_editor = new Array();
@@ -441,7 +439,6 @@
                         by_editor.push('<option value="'+name+'">'+name+'</option>');
                     }
                 }
-                loading(false);
             }
 
             $('button').prop('disabled', false);
@@ -474,6 +471,7 @@
                 if(bformer.options.publicEditor){
                     options.userId = config.pcapianonymous;
                 }
+                loading(true);
                 pcapi.getEditor(options).then(function(data){
                     bformer.appendExistingEditor(data, true, editorTitle);
                     bformer.enableActionButtons(false, false, false);
