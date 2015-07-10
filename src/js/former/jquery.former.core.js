@@ -381,6 +381,7 @@
         //server editors
         var bformer = this;
         loading(true);
+        $('#save').prop('disabled', true)
         pcapi.checkLogin(function(result, data){
             if(result){
                 if(data.state === 1){
@@ -401,14 +402,15 @@
 
     BuildFormer.prototype.loadEditors = function(){
         var userId = pcapi.getUserId();
-        if(this.options.publicEditor){
-            userId = config.pcapianonymous;
-        }
+        //if(this.options.publicEditor){
+        //    userId = config.pcapianonymous;
+        //}
         var options = {
             "remoteDir": "editors",
             "userId": userId
         };
         var bformer = this;
+        loading(true);
         pcapi.getItems(options).then(function(data){
             var form_links = new Array();
             var by_editor = new Array();
@@ -439,8 +441,10 @@
                         by_editor.push('<option value="'+name+'">'+name+'</option>');
                     }
                 }
+                loading(false);
             }
 
+            $('button').prop('disabled', false);
             $(".get-form").remove();
             $("#deditors").after(form_links.join(""));
             $("#by-editor").html(by_editor.join(""));
