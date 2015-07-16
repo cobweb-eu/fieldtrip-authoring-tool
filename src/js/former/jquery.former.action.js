@@ -85,5 +85,8 @@
     geometryTypeAction: function(target, element, elements){
       GeometryTypeImplementation.init(target);
       //geometryTypeImplementation.init(target);
+    },
+    bleAction: function(target, element, elements){
+      BLEImplementation.init(target);
     }
   }

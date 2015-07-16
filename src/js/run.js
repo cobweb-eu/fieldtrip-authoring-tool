@@ -49,7 +49,8 @@
           "warningAction": ["warning", "Warning Message"],
           "dtreeAction": ["dtree", "Decision Tree"],
           "layersAction": ["layers", "Layers"],
-          "geometryTypeAction": ["geometryType", "Geometry Type"]
+          "geometryTypeAction": ["geometryType", "Geometry Type"],
+          "bleAction": ["bleType", "Bluetooth"]
         }
       };
 
