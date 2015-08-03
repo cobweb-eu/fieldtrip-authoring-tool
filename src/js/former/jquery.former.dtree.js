@@ -18,7 +18,9 @@ DTreeImplementation.prototype.implement = function(){
         $("#upload-button").unbind('click');
         $("#upload-button").click($.proxy(function(){
             // TODO: When we migrate to modules get the sid & publicEditor from core
-            var dtreeFname = utils.getParams().sid + '.json';
+            var target = this.target;
+            var index = findIForFieldcontain('#' + target, '.fieldcontain', 'dtree');
+            var dtreeFname = utils.getParams().sid + '-' + index + '.json';
             var publicEditor = utils.getParams().public === 'true';
             var options = {
                 "remoteDir": "editors",
@@ -28,7 +30,6 @@ DTreeImplementation.prototype.implement = function(){
             };
 
             loading(true);
-            var target = this.target;
 
             if(publicEditor){
                 options.urlParams = {
@@ -39,12 +40,13 @@ DTreeImplementation.prototype.implement = function(){
             pcapi.uploadFile(options).then($.proxy(function(result, data){
                 $("#dialog-upload").dialog("close");
                 alert("File was uploaded");
+
                 $.ajax({
                     url: "templates/dtreeTemplate.html",
                     dataType: 'html',
                     success: function(tmpl){
                         var data = {
-                            "i": findIForFieldcontain("#"+target, '.fieldcontain', "dtree"),
+                            "i": index,
                             "type": "dtree",
                             "title": file.name,
                             "dtree": dtreeFname,
