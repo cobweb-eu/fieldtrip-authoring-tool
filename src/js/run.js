@@ -4,7 +4,11 @@
 
       $("#dialog-upload").dialog({
         autoOpen: false,
-        modal: false
+        modal: false,
+        close: function() {
+            // Reset the form
+            $('#dialog-upload > form').trigger('reset');
+        }
       });
 
 
