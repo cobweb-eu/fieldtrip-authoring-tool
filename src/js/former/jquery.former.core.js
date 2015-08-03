@@ -719,7 +719,7 @@
 
         //get rid of eo.json link
         code = $("<div/>").append($(code));
-        code.find(".fieldcontain-dtree a").remove();
+        code.find("div.fieldcontain[data-fieldtrip-type=dtree] a").remove();
         code.find(".fieldcontain-features fieldset").remove();
         code.find("#fieldcontain-geometryType span").remove();
 
@@ -908,9 +908,9 @@
             $(this).after('<fieldset><label for="form-features">'+$(this).val()+'</label>'+
                           '<a href="'+pcapi.buildFSUrl('features', fileName)+'" target="blank">'+fileName+'</a></fieldset>');
         });
-        $(".fieldcontain-dtree input[type=hidden]").each(function(){
+        $("div.fieldcontain[data-fieldtrip-type=dtree] input[type=hidden]").each(function(){
             var fileName = $(this).val();
-            $(this).parent().find(".button-dtree").html('<a href="'+pcapi.buildFSUrl('features', fileName)+'" target="blank">'+fileName+'</a>');
+            $(this).parent().find(".button-dtree").html('<a href="'+pcapi.buildFSUrl('editors', fileName)+'" target="blank">'+fileName+'</a>');
         });
         var gType = $("#fieldcontain-geometryType input[type=hidden]").val();
         if(gType){
