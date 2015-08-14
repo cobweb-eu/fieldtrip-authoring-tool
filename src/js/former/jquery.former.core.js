@@ -453,9 +453,9 @@
                     "remoteDir": "editors",
                     "item": this.title
                 };
-                if(bformer.options.publicEditor){
-                    options.userId = config.pcapianonymous;
-                }
+                //if(bformer.options.publicEditor){
+                //    options.userId = config.pcapianonymous;
+                //}
                 loading(true);
                 pcapi.getEditor(options).then(function(data){
                     bformer.appendExistingEditor(data, true, title);
@@ -468,9 +468,9 @@
                     "remoteDir": "editors",
                     "item": sid
                 };
-                if(bformer.options.publicEditor){
-                    options.userId = config.pcapianonymous;
-                }
+                //if(bformer.options.publicEditor){
+                //    options.userId = config.pcapianonymous;
+                //}
                 loading(true);
                 pcapi.getEditor(options).then(function(data){
                     bformer.appendExistingEditor(data, true, editorTitle);
